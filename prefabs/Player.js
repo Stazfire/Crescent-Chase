@@ -1,20 +1,20 @@
-// Rocket prefab
-class Rocket extends Phaser.GameObjects.Sprite {
+// Player prefab
+class Player extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, texture, frame) {
       super(scene, x, y, texture, frame);
   
       // add object to existing scene
       scene.add.existing(this);
-      this.isFiring = false; //track rocket's firing status
-      this.sfxRocket = scene.sound.add('sfx_rocket'); // add rocket sfx
+      this.isFiring = false; //track player's firing status
+      this.sfxPlayer = scene.sound.add('sfx_player'); // add player sfx
     }
 
     update() {
-        let speed = 5;
+        // let speed = 5;
         // fire button
         // if (Phaser.Input.Keyboard.JustDown(keyF) && !this.isFiring) {
         //     this.isFiring = true;
-        //     this.sfxRocket.play();  // play sfx
+        //     this.sfxPlayer.play();  // play sfx
         // }
         // //move up when firing
         // if(this.isFiring && this.y >= 108) {
@@ -29,7 +29,7 @@ class Rocket extends Phaser.GameObjects.Sprite {
 
     //reset player position back to start
     reset() {
-        this.isFiring = false;
+        console.log("You dead");
         // this.y = 431;
     }
 }

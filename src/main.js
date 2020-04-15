@@ -9,10 +9,17 @@ let config = {
         width: 1040,
         height: 680,
     },
+    physics: {
+        default: 'arcade',
+        arcade: {
+            debug: false,
+            gravity: { y: 0}
+        }
+    },
     scene: [ Menu, Play ]
 }
 
 let game = new Phaser.Game(config);
 
 // reserve keyboard vars
-let keyF, keyLEFT, keyRIGHT, keyUP, keyDOWN;
+let keyF, keyLEFT, keyRIGHT, keyUP, keyDOWN, keyW, keyA, keyS, keyD;
