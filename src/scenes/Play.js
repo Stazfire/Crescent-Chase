@@ -8,6 +8,7 @@ class Play extends Phaser.Scene {
         this.group4;
         this.posX = 0;
         this.posY = 0;
+        this.radius = 150;
     }
 
     preload() {
@@ -45,29 +46,13 @@ class Play extends Phaser.Scene {
             frameRate: 60
         });
 
-        this.weapon = new Weapon(this).setScale(1,1).setOrigin(0,0);
-
         //energy balls
         this.bombs = this.physics.add.group({
             key:'ball',
-            frameQuantity: 10
+            frameQuantity: 8
         });
     
-        this.circle = new Phaser.Geom.Circle(this.bossB.x, this.bossB.y, 150);
-    
-        this.startAngle = this.tweens.addCounter({
-            from: 0,
-            to: 6.28,
-            duration: 6000,
-            repeat: -1
-        })
-    
-        this.endAngle = this.tweens.addCounter({
-            from: 6.28,
-            to: 12.56,
-            duration: 6000,
-            repeat: -1
-        })
+        this.createCircle();
 
         // score
         this.bossHP = 100000;
@@ -159,7 +144,8 @@ class Play extends Phaser.Scene {
 
     setKey() {
         // define keys
-        keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+        keyI = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I);
+        keyO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
@@ -170,9 +156,9 @@ class Play extends Phaser.Scene {
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     }
 
+ 
+
     update() {
-        this.weapon.cyclone(this.circle,this.bossB,this.bombs,this.startAngle,this.endAngle);
-        
         let pointer = this.input.activePointer;
         if(pointer.isDown) {
             this.slow = 10;
@@ -183,14 +169,14 @@ class Play extends Phaser.Scene {
 
         this.timeRight.text = this.timer;
         // check key input for restart
-        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyF)) {
+        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyI)) {
             this.scene.restart(this.p1Score);
         }
 
         this.starfield.tilePositionX -= 8;
-        if (!this.gameOver) {               
+        if (!this.gameOver) {              
             this.player.update();         // update player sprite
-            this.bossB.update();
+            this.bossB.update(this.circle,this.bombs,this.startAngle,this.endAngle,this.radius);
             
         } 
 
@@ -240,5 +226,22 @@ class Play extends Phaser.Scene {
         this.p1Score += ship.points;
         this.scoreLeft.text = this.p1Score;
         this.sound.play('sfx_explosion');
+    }
+
+    createCircle() {
+        this.circle = new Phaser.Geom.Circle(this.bossB.x, this.bossB.y, this.radius); //<- radius of circlew
+        this.startAngle = this.tweens.addCounter({
+            from: 0,
+            to: 6.28,
+            duration: 8000, //speed of rotation higher = slower
+            repeat: -1
+        })
+    
+        this.endAngle = this.tweens.addCounter({
+            from: 6.28,
+            to: 12.56,
+            duration: 8000, //speed of rotation higher = slowerd
+            repeat: -1
+        })
     }
 }
