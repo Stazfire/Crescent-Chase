@@ -3,6 +3,8 @@ class Weapon extends Phaser.GameObjects.Sprite {
     constructor(scene) {
         super(scene);
         scene.add.existing(this); //add existing scene, displayList, updateList
+        this.projectileX;
+        this.projectileY;
     }
 
     update() {
@@ -10,7 +12,15 @@ class Weapon extends Phaser.GameObjects.Sprite {
     }
 
     cyclone(circle,boss,bombs,startAngle,endAngle) {
-        Phaser.Actions.SetXY([circle], boss.x + 80, boss.y + 70);
+        if(!!this.bossFire) {
+            this.projectileX = boss.x;
+            this.projectileY = boss.y;
+            Phaser.Actions.SetXY([circle], boss.x + 80, boss.y + 70);
+        }
+        else {
+            this.projectileX++;
+            Phaser.Actions.SetXY([circle], boss.x + 80, boss.y + 70);
+        }
 
         Phaser.Actions.PlaceOnCircle(
             bombs.getChildren(), 

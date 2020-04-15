@@ -7,13 +7,14 @@ class Boss extends Phaser.GameObjects.Sprite {
       scene.add.existing(this);
       this.bossFire = false; //track boss's firing status
       this.sfxBoss = scene.sound.add('sfx_player'); // add boss sfx
+      
     }
 
     update() {
         let speed = 5;
         //move left/right
         if(!this.bossFire) {
-            if(keyLEFT.isDown || keyA.isDown && this.x >= 47) {
+            if(keyLEFT.isDown || keyA.isDown && this.x >= 0) {
                 this.x -= speed;
             }
             else if(keyRIGHT.isDown || keyD.isDown && this.x <= 278) {
@@ -30,15 +31,7 @@ class Boss extends Phaser.GameObjects.Sprite {
             }
         }
 
-        // // fire button
-        // if (Phaser.Input.Keyboard.JustDown(keyF) && !this.bossFire) {
-        //     this.bossFire = true;
-        //     this.sfxPlayer.play();  // play sfx
-        // }
-        // //move up when firing
-        // if(this.isFiring && this.y >= 108) {
-        //     this.y -= speed;
-        // }
+        
     }
 
 
