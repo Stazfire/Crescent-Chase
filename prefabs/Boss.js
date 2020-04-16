@@ -10,15 +10,25 @@ class Boss extends Phaser.GameObjects.Sprite {
         this.sfxBoss = scene.sound.add('sfx_player'); // add boss sfx
         this.projectileX;
         this.projectileY;
+        this.projectileX2;
+        this.projectileY2;
+        this.projectileX3;
+        this.projectileY3;
         this.cyclone;
         this.cyclonePos;
-        this.projectileSpeed = 10;
+        this.cyclone2;
+        this.cyclonePos2;
+        this.cyclone3;
+        this.cyclonePos3;
+        this.projectileSpeed = 20;
         this.radius = 150;
-        this.spraySpeed = 20;
+        this.radius2 = 150;
+        this.radius3 = 150;
+        this.spraySpeed = 10;
         
     }
 
-    update(circle,bombs,startAngle,endAngle,radius) {
+    update(bombs,bombs2,bombs3,startAngle,endAngle) {
         
         let speed = 5;
         //move left/right
@@ -49,27 +59,32 @@ class Boss extends Phaser.GameObjects.Sprite {
         }
 
         if(!this.bossFire && !this.bossSpray) {
+            this.circle = new Phaser.Geom.Circle(this.projectileX + 80, this.projectileY + 80, this.radius); //<- radius of circle
             this.projectileX = this.x;
             this.projectileY = this.y;
-            this.cyclonePos = Phaser.Actions.SetXY([circle], this.projectileX + 80, this.projectileY + 80);
-    
-                this.cyclone = Phaser.Actions.PlaceOnCircle(
-                    bombs.getChildren(), 
-                    circle, 
-                    startAngle.getValue(), 
-                    endAngle.getValue()
-                );
+            this.projectileX2 = this.x;
+            this.projectileY2 = this.y;
+            this.projectileX3 = this.x;
+            this.projectileY3 = this.y;
+            this.cyclonePos = Phaser.Actions.SetXY([this.circle], this.projectileX + 80, this.projectileY + 80);
+            this.cyclone = Phaser.Actions.PlaceOnCircle(
+                bombs.getChildren(), 
+                this.circle, 
+                startAngle.getValue(), 
+                endAngle.getValue()
+            );
         }
 
         //when firing
         if(this.bossFire && !this.bossSpray) {
+            this.circle = new Phaser.Geom.Circle(this.projectileX + 80, this.projectileY + 80, this.radius); //<- radius of circle
             this.projectileX = this.projectileX + this.projectileSpeed;
             if(this.projectileX < 1300) {
-                this.cyclonePos = Phaser.Actions.SetXY([circle], this.projectileX + 80, this.projectileY + 80);
+                this.cyclonePos = Phaser.Actions.SetXY([this.circle], this.projectileX + 80, this.projectileY + 80);
     
                 this.cyclone = Phaser.Actions.PlaceOnCircle(
                     bombs.getChildren(), 
-                    circle, 
+                    this.circle, 
                     startAngle.getValue(), 
                     endAngle.getValue()
                 );
@@ -79,6 +94,8 @@ class Boss extends Phaser.GameObjects.Sprite {
         //when spraying
         if(this.bossSpray && !this.bossFire) {
             this.newCircle = new Phaser.Geom.Circle(this.projectileX + 80, this.projectileY + 80, this.radius); //<- radius of circle
+            this.newCircle2 = new Phaser.Geom.Circle(this.projectileX2 + 80, this.projectileY2 + 80, this.radius2); //<- radius of circle
+            this.newCircle3 = new Phaser.Geom.Circle(this.projectileX3 + 80, this.projectileY3 + 80, this.radius3); //<- radius of circle
             this.radius = this.radius + this.spraySpeed;
             this.cyclonePos = Phaser.Actions.SetXY([this.newCircle], this.projectileX + 80, this.projectileY + 80);
 
@@ -86,10 +103,44 @@ class Boss extends Phaser.GameObjects.Sprite {
                 bombs.getChildren(), 
                 this.newCircle, 
             );
+
+            if(this.radius >= 300) {
+                if(this.radius == 300) {
+                    this.projectileX2 = this.x;
+                    this.projectileY2 = this.y;
+                }
+                this.radius2 = this.radius2 + this.spraySpeed;
+                this.cyclonePos2 = Phaser.Actions.SetXY([this.newCircle2], this.projectileX2 + 80, this.projectileY2 + 80);
+
+                this.cyclone2 = Phaser.Actions.PlaceOnCircle(
+                    bombs2.getChildren(), 
+                    this.newCircle2, 
+                );
+                if(this.radius2 >= 300) {
+                    if(this.radius2 == 300) {
+                        this.projectileX3 = this.x;
+                        this.projectileY3 = this.y;
+                    }
+                    this.radius3 = this.radius3 + this.spraySpeed;
+                    this.cyclonePos3 = Phaser.Actions.SetXY([this.newCircle3], this.projectileX3 + 80, this.projectileY3 + 80);
+    
+                    this.cyclone3 = Phaser.Actions.PlaceOnCircle(
+                        bombs3.getChildren(), 
+                        this.newCircle3, 
+                    );
+                }
+            }
+            
+            
+
+
         }
 
         //reset when miss
-        if(this.projectileX >= 1300 || this.radius >= 900) {
+        if(this.projectileX >= 1300) { 
+            this.reset();
+        }
+        if(this.radius >= 1100 && this.radius2 >= 1100 && this.radius3 >= 1100) {
             this.reset();
         }
     }
@@ -100,7 +151,13 @@ class Boss extends Phaser.GameObjects.Sprite {
         this.bossSpray = false;
         this.projectileX = this.x;
         this.projectileY = this.y;
+        this.projectileX2 = this.x;
+        this.projectileY2 = this.y;
+        this.projectileX3 = this.x;
+        this.projectileY3 = this.y;
         this.radius = 150;
+        this.radius2 = 150;
+        this.radius3 = 150;
         
     }
 }

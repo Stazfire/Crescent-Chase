@@ -43,13 +43,23 @@ class Play extends Phaser.Scene {
         this.anims.create({
             key: 'explode',
             frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 9, first: 0}),
-            frameRate: 60
+            frameRate: 30
         });
 
         //energy balls
         this.bombs = this.physics.add.group({
             key:'ball',
             frameQuantity: 8
+        });
+        //energy balls
+        this.bombs2 = this.physics.add.group({
+            key:'ball',
+            frameQuantity: 44
+        });
+        //energy balls
+        this.bombs3 = this.physics.add.group({
+            key:'ball',
+            frameQuantity: 50
         });
     
         this.createCircle();
@@ -95,14 +105,7 @@ class Play extends Phaser.Scene {
 
         this.addEvent(HPConfig);
 
-        Phaser.Actions.RandomRectangle(this.bombs.getChildren(), this.physics.world.bounds);
-        this.physics.add.collider(
-            this.bombs,
-            this.player,
-            function ()
-            {
-                console.log("FInally");
-        });
+
     }
 
     addEvent(HPConfig) {
@@ -176,7 +179,7 @@ class Play extends Phaser.Scene {
         this.starfield.tilePositionX -= 8;
         if (!this.gameOver) {              
             this.player.update();         // update player sprite
-            this.bossB.update(this.circle,this.bombs,this.startAngle,this.endAngle,this.radius);
+            this.bossB.update(this.bombs,this.bombs2,this.bombs3,this.startAngle,this.endAngle);
             
         } 
 
@@ -229,7 +232,7 @@ class Play extends Phaser.Scene {
     }
 
     createCircle() {
-        this.circle = new Phaser.Geom.Circle(this.bossB.x, this.bossB.y, this.radius); //<- radius of circlew
+        this.circle = new Phaser.Geom.Circle(this.bossB.x, this.bossB.y, this.radius); //<- radius of circle
         this.startAngle = this.tweens.addCounter({
             from: 0,
             to: 6.28,
