@@ -1,6 +1,6 @@
-class Play extends Phaser.Scene {
+class Single extends Phaser.Scene {
     constructor() {
-        super("playScene");
+        super("singleScene");
 
         this.group1;
         this.group2;
@@ -31,7 +31,7 @@ class Play extends Phaser.Scene {
 
         // add player (p1)
         this.player = new Player(this, game.config.width - 100, game.config.height/2, 'player').setScale(1, 1).setOrigin(0, 0);
-        this.bossB = new Boss(this, 0, game.config.height/2 - 50, 'boss').setScale(1, 1).setOrigin(0,0);
+        this.bossB = new Boss_single(this, 0, game.config.height/2 - 50, 'boss').setScale(1, 1).setOrigin(0,0);
 
         // add spaceships (x3)
         this.ship01 = new Spaceship(this, this.player.x, this.player.y, 'spaceship', 0).setOrigin(0,0);
@@ -111,6 +111,26 @@ class Play extends Phaser.Scene {
 
         this.addEvent(HPConfig);
 
+        //this.graphics = this.add.graphics(); //set path visble
+
+        this.follower = { t: 0, vec: new Phaser.Math.Vector2() };
+
+        this.path = new Phaser.Curves.Path(120, 280); //move path
+
+        this.path.circleTo(100, false, 90);
+
+        this.path.moveTo(120, 280); //move the path
+
+        //  Rotate this circle so it completes the loop
+        this.path.circleTo(100, true, 270);
+
+        this.tweens.add({
+            targets: this.follower,
+            t: 1,
+            ease: 'Linear',
+            duration: 4000,
+            repeat: -1
+        });
 
     }
 
@@ -169,6 +189,17 @@ class Play extends Phaser.Scene {
  
 
     update() {
+        //this.graphics.clear();
+        //this.graphics.lineStyle(2, 0xffffff, 1);
+
+        //this.path.draw(this.graphics);
+
+        this.path.getPoint(this.follower.t, this.follower.vec);
+
+        //this.graphics.fillStyle(0xff0000, 1);
+        this.bossB.x = this.follower.vec.x;
+        this.bossB.y = this.follower.vec.y;
+
         let pointer = this.input.activePointer;
         if(pointer.isDown) {
             this.slow = 10;
@@ -186,7 +217,6 @@ class Play extends Phaser.Scene {
         this.starfield.tilePositionX -= 8;
         if (!this.gameOver) {              
             this.player.update();         // update player sprite
-            this.bossB.update(this.bombs,this.bombs2,this.bombs3,this.startAngle,this.endAngle,this.player);
             
         } 
 
