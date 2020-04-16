@@ -48,18 +48,27 @@ class Play extends Phaser.Scene {
 
         //energy balls
         this.bombs = this.physics.add.group({
+            active: true,
+            visible: true,
             key:'ball',
-            frameQuantity: 8
+            frameQuantity: 8,
+            classType: Boss
         });
         //energy balls
         this.bombs2 = this.physics.add.group({
+            active: false,
+            visible: false,
             key:'ball',
-            frameQuantity: 44
+            frameQuantity: 44,
+            classType: Boss
         });
         //energy balls
         this.bombs3 = this.physics.add.group({
+            active: false,
+            visible: false,
             key:'ball',
-            frameQuantity: 50
+            frameQuantity: 50,
+            classType: Boss
         });
     
         this.createCircle();
@@ -98,8 +107,6 @@ class Play extends Phaser.Scene {
         }
         this.timeRight = this.add.text(400, 54, this.timer, timerConfig);
 
-        
-        
         // 60-second play clock
         HPConfig.fixedWidth = 0;
 
@@ -149,6 +156,7 @@ class Play extends Phaser.Scene {
         // define keys
         keyI = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I);
         keyO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
+        keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
@@ -179,15 +187,15 @@ class Play extends Phaser.Scene {
         this.starfield.tilePositionX -= 8;
         if (!this.gameOver) {              
             this.player.update();         // update player sprite
-            this.bossB.update(this.bombs,this.bombs2,this.bombs3,this.startAngle,this.endAngle);
+            this.bossB.update(this.bombs,this.bombs2,this.bombs3,this.startAngle,this.endAngle,this.player);
             
         } 
 
         // check collisions
-        if(this.checkCollision(this.player, this.bombs)) {
-            console.log("gameee");
-            this.player.reset();
-        }
+        // if(this.checkCollision(this.player, this.bombs)) {
+        //     console.log("gameee");
+        //     this.player.reset();
+        // }
         if (this.checkCollision(this.player, this.ship01)) {
             //this.shipExplode(this.ship01);
         }
@@ -232,7 +240,6 @@ class Play extends Phaser.Scene {
     }
 
     createCircle() {
-        this.circle = new Phaser.Geom.Circle(this.bossB.x, this.bossB.y, this.radius); //<- radius of circle
         this.startAngle = this.tweens.addCounter({
             from: 0,
             to: 6.28,
