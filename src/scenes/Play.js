@@ -1,11 +1,6 @@
 class Play extends Phaser.Scene {
     constructor() {
         super("playScene");
-
-        this.group1;
-        this.group2;
-        this.group3;
-        this.group4;
         this.posX = 0;
         this.posY = 0;
         this.radius = 150;
@@ -127,11 +122,17 @@ class Play extends Phaser.Scene {
         
         this.createCircle();
 
-        this.physics.add.overlap(this.player, this.bombsHitbox, this.playerHit);
-        this.physics.add.overlap(this.player, this.bombsHitbox2, this.playerHit);
-        this.physics.add.overlap(this.player, this.bombsHitbox3, this.playerHit);
+        this.physics.add.overlap(this.player, this.bombsHitbox, () => {
+            this.sound.play('sfx_explosion');
+        });
+        this.physics.add.overlap(this.player, this.bombsHitbox2, () => {
+            this.sound.play('sfx_explosion');
+        });
+        this.physics.add.overlap(this.player, this.bombsHitbox3, () => {
+            this.sound.play('sfx_explosion');
+        });
         
-
+        
         // score
         this.bossHP = 100000;
         // score display
@@ -211,11 +212,6 @@ class Play extends Phaser.Scene {
         }, this);
     }
 
-    playerHit() {
-        
-        console.log("dead");
-    }
-
     setKey() {
         // define keys
         keyI = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I);
@@ -234,9 +230,6 @@ class Play extends Phaser.Scene {
  
 
     update() {
-
-        this.physics.world.collide(this.player, this.bombs);
-
         let pointer = this.input.activePointer;
         if(pointer.isDown) {
             this.slow = 10;
@@ -303,6 +296,7 @@ class Play extends Phaser.Scene {
         // score increment and repaint
         this.p1Score += ship.points;
         this.scoreLeft.text = this.p1Score;
+        
         
     }
 
