@@ -19,7 +19,8 @@ class Play extends Phaser.Scene {
         this.load.image('boss', './assets/Vampy.png');
         this.load.image('ball', 'assets/balls.png');
         // load spritesheet
-        this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
+        this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 18, frameHeight: 8, startFrame: 0, endFrame: 9});
+        this.load.spritesheet('moon', './assets/Moon.png', {frameWidth: 30, frameHeight: 30, startFrame: 0, endFrame: 11});
         this.load.spritesheet('Vampy', './assets/Vampy_Spritesheet.png', {frameWidth: 171.8, frameHeight: 180, startFrame: 0, endFrame: 11});
     }
 
@@ -31,7 +32,7 @@ class Play extends Phaser.Scene {
         this.starfield = this.add.tileSprite(0, 0, 1100, 680, 'starfield').setScale(1, 1).setOrigin(0, 0);
 
         // add player (p1)
-        this.player = new Player(this, game.config.width - 100, game.config.height/2, 'player').setScale(1, 1).setOrigin(0, 0);
+        this.player = this.physics.add.sprite(400, 300, 'player');
 
         this.vampyAnims = this.anims.create({
             key: 'hair',
@@ -56,32 +57,80 @@ class Play extends Phaser.Scene {
             frameRate: 30
         });
 
+        this.moon = this.anims.create({
+            key: 'spin',
+            frames: this.anims.generateFrameNumbers('moon', { start: 0, end: 11, first: 0}),
+            frameRate: 5,
+            repeat: 100
+        });
+
         //energy balls
         this.bombs = this.physics.add.group({
             active: true,
             visible: true,
+            key:'moon',
+            frameQuantity: 8,
+            collideWorldBounds: false,
+            classType: Boss
+        });
+        //hitbox
+        this.bombsHitbox = this.physics.add.group({
+            active: true,
+            visible: false,
             key:'ball',
             frameQuantity: 8,
+            collideWorldBounds: false,
             classType: Boss
         });
         //energy balls
         this.bombs2 = this.physics.add.group({
-            active: false,
+            active: true,
+            visible: false,
+            key:'moon',
+            frameQuantity: 44,
+            collideWorldBounds: false,
+            classType: Boss
+        });
+        //hitbox
+        this.bombsHitbox2 = this.physics.add.group({
+            active: true,
             visible: false,
             key:'ball',
             frameQuantity: 44,
+            collideWorldBounds: false,
             classType: Boss
         });
         //energy balls
         this.bombs3 = this.physics.add.group({
-            active: false,
+            active: true,
+            visible: false,
+            key:'moon',
+            frameQuantity: 50,
+            collideWorldBounds: false,
+            classType: Boss
+        });
+        //hitbox
+        this.bombsHitbox3 = this.physics.add.group({
+            active: true,
             visible: false,
             key:'ball',
             frameQuantity: 50,
+            collideWorldBounds: false,
             classType: Boss
         });
-    
+
+        
+
+        this.bombs.playAnimation('spin');
+        this.bombs2.playAnimation('spin');
+        this.bombs3.playAnimation('spin');
+        
         this.createCircle();
+
+        this.physics.add.overlap(this.player, this.bombsHitbox, this.playerHit);
+        this.physics.add.overlap(this.player, this.bombsHitbox2, this.playerHit);
+        this.physics.add.overlap(this.player, this.bombsHitbox3, this.playerHit);
+        
 
         // score
         this.bossHP = 100000;
@@ -157,9 +206,14 @@ class Play extends Phaser.Scene {
                 this.player.y += pointer.movementY/this.slow;
                 //  Keep the player within the game
                 this.player.x  = Phaser.Math.Clamp(this.player.x , 0, 960);
-                this.player.y  = Phaser.Math.Clamp(this.player.y , 40, 580);
+                this.player.y  = Phaser.Math.Clamp(this.player.y , 40, 640);
             }
         }, this);
+    }
+
+    playerHit() {
+        
+        console.log("dead");
     }
 
     setKey() {
@@ -180,6 +234,9 @@ class Play extends Phaser.Scene {
  
 
     update() {
+
+        this.physics.world.collide(this.player, this.bombs);
+
         let pointer = this.input.activePointer;
         if(pointer.isDown) {
             this.slow = 10;
@@ -197,7 +254,7 @@ class Play extends Phaser.Scene {
         this.starfield.tilePositionX -= 8;
         if (!this.gameOver) {              
             this.player.update();         // update player sprite
-            this.bossB.update(this.bombs,this.bombs2,this.bombs3,this.startAngle,this.endAngle,this.player);
+            this.bossB.update(this.bombs,this.bombs2,this.bombs3,this.startAngle,this.endAngle,this.bombsHitbox,this.bombsHitbox2,this.bombsHitbox3);
             
         } 
 
@@ -206,9 +263,9 @@ class Play extends Phaser.Scene {
         //     console.log("gameee");
         //     this.player.reset();
         // }
-        if (this.checkCollision(this.player, this.ship01)) {
-            //this.shipExplode(this.ship01);
-        }
+        // if (this.checkCollision(this.player, this.bombs)) {
+        //     //
+        // }
         if (this.checkCollision(this.player, this.ship02)) {
             this.shipExplode(this.ship02);
         }
@@ -221,12 +278,12 @@ class Play extends Phaser.Scene {
         }
     }
 
-    checkCollision(player, ship) {
+    checkCollision(player, bombs) {
         // simple AABB checking
-        if (player.x < ship.x + ship.width && 
-            player.x + player.width > ship.x && 
-            player.y < ship.y + ship.height &&
-            player.height + player.y > ship. y) {
+        if (player.x < bombs.x + bombs.width && 
+            player.x + player.width > bombs.x && 
+            player.y < bombs.y + bombs.height &&
+            player.height + player.y > bombs. y) {
                 return true;
         } else {
             return false;
