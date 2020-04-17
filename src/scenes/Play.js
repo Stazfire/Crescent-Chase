@@ -16,10 +16,11 @@ class Play extends Phaser.Scene {
         this.load.image('player', './assets/player.png');
         this.load.image('spaceship', './assets/spaceship.png');
         this.load.image('starfield', './assets/starfield.png');
-        this.load.image('boss', './assets/boss.png');
+        this.load.image('boss', './assets/Vampy.png');
         this.load.image('ball', 'assets/balls.png');
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
+        this.load.spritesheet('Vampy', './assets/Vampy_Spritesheet.png', {frameWidth: 171.8, frameHeight: 180, startFrame: 0, endFrame: 11});
     }
 
     create() {
@@ -31,7 +32,17 @@ class Play extends Phaser.Scene {
 
         // add player (p1)
         this.player = new Player(this, game.config.width - 100, game.config.height/2, 'player').setScale(1, 1).setOrigin(0, 0);
-        this.bossB = new Boss(this, 0, game.config.height/2 - 50, 'boss').setScale(1, 1).setOrigin(0,0);
+
+        this.vampyAnims = this.anims.create({
+            key: 'hair',
+            frames: this.anims.generateFrameNumbers('Vampy', { start: 0, end: 11, first: 0}),
+            frameRate: 5,
+            repeat: 100
+        });
+
+        this.bossB = new Boss(this, 0, game.config.height/2 - 50, 'Vampy').setScale(1, 1).setOrigin(0,0);
+
+        this.bossB.anims.play('hair');
 
         // add spaceships (x3)
         this.ship01 = new Spaceship(this, this.player.x, this.player.y, 'spaceship', 0).setOrigin(0,0);
