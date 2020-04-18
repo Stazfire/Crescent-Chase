@@ -10,17 +10,7 @@ class Single extends Phaser.Scene {
     }
 
     preload() {
-        // load images/tile sprites
-        this.load.image('player', './assets/player.png');
-        this.load.image('spaceship', './assets/spaceship.png');
-        this.load.image('starfield', './assets/starySky.png');
-        this.load.image('mountains', './assets/mountains.png');
-        this.load.image('trees', './assets/foggyTrees.png');
-        this.load.image('ball', 'assets/balls.png');
-        // load spritesheet
-        this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 18, frameHeight: 8, startFrame: 0, endFrame: 9});
-        this.load.spritesheet('moon', './assets/Moon.png', {frameWidth: 30, frameHeight: 30, startFrame: 0, endFrame: 11});
-        this.load.spritesheet('Vampy', './assets/Vampy.png', {frameWidth: 171.8, frameHeight: 180, startFrame: 0, endFrame: 11});
+
     }
 
     create() {
