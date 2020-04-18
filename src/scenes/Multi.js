@@ -143,8 +143,6 @@ class Multi extends Phaser.Scene {
         }
         this.scoreLeft = this.add.text(69, 54, this.bossHP, HPConfig);
 
-        // timer
-        this.timer = 60;
         // timer display
         let timerConfig = {
             fontFamily: 'Courier',
@@ -187,8 +185,8 @@ class Multi extends Phaser.Scene {
                 this.player.x += pointer.movementX/this.slow;
                 this.player.y += pointer.movementY/this.slow;
                 //  Keep the player within the game
-                this.player.x  = Phaser.Math.Clamp(this.player.x , 0, 1000);
-                this.player.y  = Phaser.Math.Clamp(this.player.y , 40, 640);
+                this.player.x  = Phaser.Math.Clamp(this.player.x , 10, 1090);
+                this.player.y  = Phaser.Math.Clamp(this.player.y , 20, 660);
             }
         }, this);
     }
