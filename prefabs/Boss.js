@@ -19,14 +19,8 @@ class Boss extends Phaser.GameObjects.Sprite {
         this.radius = 150;
         this.radius2 = 150;
         this.radius3 = 150;
-        this.spraySpeed = 10;
+        this.spraySpeed = 15;
         this.collapseSpeed = 6;
-        this.distanceX;
-        this.distanceY;
-        this.speed = 1;
-        this.direction = 0;
-        this.xSpeed = 0;
-        this.ySpeed = 0;
         this.collapse = false;
         
     }
@@ -175,6 +169,7 @@ class Boss extends Phaser.GameObjects.Sprite {
 
         //when collapse
         if(this.bossCollapse && !this.bossSpray && !this.bossFire) {
+            console.log("collapse");
             this.collapseCircle = new Phaser.Geom.Circle(this.projectileX + 82, this.projectileY + 82, this.radius); //<- radius of circle
             if(!this.collapse) {
                 this.radius = this.radius - this.collapseSpeed;

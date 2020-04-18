@@ -10,13 +10,14 @@ class Play extends Phaser.Scene {
         // load images/tile sprites
         this.load.image('player', './assets/player.png');
         this.load.image('spaceship', './assets/spaceship.png');
-        this.load.image('starfield', './assets/starfield.png');
-        this.load.image('boss', './assets/Vampy.png');
+        this.load.image('starfield', './assets/starySky.png');
+        this.load.image('mountains', './assets/mountains.png');
+        this.load.image('trees', './assets/foggyTrees.png');
         this.load.image('ball', 'assets/balls.png');
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 18, frameHeight: 8, startFrame: 0, endFrame: 9});
         this.load.spritesheet('moon', './assets/Moon.png', {frameWidth: 30, frameHeight: 30, startFrame: 0, endFrame: 11});
-        this.load.spritesheet('Vampy', './assets/Vampy_Spritesheet.png', {frameWidth: 171.8, frameHeight: 180, startFrame: 0, endFrame: 11});
+        this.load.spritesheet('Vampy', './assets/Vampy.png', {frameWidth: 171.8, frameHeight: 180, startFrame: 0, endFrame: 11});
     }
 
     create() {
@@ -24,11 +25,13 @@ class Play extends Phaser.Scene {
         this.setKey();
 
         // place tile sprite
-        this.starfield = this.add.tileSprite(0, 0, 1100, 680, 'starfield').setScale(1, 1).setOrigin(0, 0);
+        this.starySky = this.add.tileSprite(0, 0, 1100, 680, 'starfield').setScale(2, 2).setOrigin(0, 0);
+        this.mountain = this.add.tileSprite(0, 0, 1100, 680, 'mountains').setScale(2, 2).setOrigin(0, 0);
 
         // add player (p1)
         this.player = this.physics.add.sprite(game.config.width - 100, game.config.height/2, 'player');
-
+        
+        
         this.vampyAnims = this.anims.create({
             key: 'hair',
             frames: this.anims.generateFrameNumbers('Vampy', { start: 0, end: 11, first: 0}),
@@ -38,7 +41,7 @@ class Play extends Phaser.Scene {
 
         this.bossB = new Boss(this, 0, game.config.height/2 - 50, 'Vampy').setScale(1, 1).setOrigin(0,0);
 
-        this.bossB.anims.play('hair');
+        
 
         // add spaceships (x3)
         this.ship01 = new Spaceship(this, this.player.x, this.player.y, 'spaceship', 0).setOrigin(0,0);
@@ -171,6 +174,7 @@ class Play extends Phaser.Scene {
         HPConfig.fixedWidth = 0;
 
         this.addEvent(HPConfig);
+        this.bossB.anims.play('hair');
 
 
     }
@@ -244,7 +248,8 @@ class Play extends Phaser.Scene {
             this.scene.restart(this.p1Score);
         }
 
-        this.starfield.tilePositionX -= 8;
+        this.mountain.tilePositionX -= 4;
+        this.starySky.tilePositionX -= 0.1;
         if (!this.gameOver) {              
             this.player.update();         // update player sprite
             this.bossB.update(this.bombs,this.bombs2,this.bombs3,this.startAngle,this.endAngle,this.bombsHitbox,this.bombsHitbox2,this.bombsHitbox3);
@@ -293,6 +298,7 @@ class Play extends Phaser.Scene {
             ship.alpha = 1;                     // make ship visible again
             boom.destroy();                     // remove explosion sprite
         });
+        this.player.depth = 100;
         // score increment and repaint
         this.p1Score += ship.points;
         this.scoreLeft.text = this.p1Score;
