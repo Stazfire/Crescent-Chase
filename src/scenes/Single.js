@@ -5,6 +5,7 @@ class Single extends Phaser.Scene {
         this.posY = 0;
         this.radius = 150;
         this.single = true; //:C
+        this.startFiring = 0;
     }
 
     preload() {
@@ -66,7 +67,7 @@ class Single extends Phaser.Scene {
         //energy balls
         this.bombs = this.physics.add.group({
             active: true,
-            visible: true,
+            visible: false,
             key:'moon',
             frameQuantity: 8,
             collideWorldBounds: false,
@@ -190,6 +191,10 @@ class Single extends Phaser.Scene {
             duration: 4000,
             repeat: -1
         });
+
+        this.time.addEvent({ delay: 2000, callback: () => {
+            this.startFiring++;
+        }, callbackScope: this, loop: true });
     }
 
     addEvent(HPConfig) {
@@ -270,8 +275,12 @@ class Single extends Phaser.Scene {
         this.starySky.tilePositionX -= 0.1;
         if (!this.gameOver) {              
             this.player.update();         // update player sprite
-            this.bossB.update(this.bombs,this.bombs2,this.bombs3,this.startAngle,this.endAngle,this.bombsHitbox,this.bombsHitbox2,this.bombsHitbox3,this.single,this.player);
-            
+            if(this.startFiring >=3) {
+                this.bombs.getChildren().forEach(function() {
+                    this.bombs.setVisible(true);
+                }, this);
+                this.bossB.update(this.bombs,this.bombs2,this.bombs3,this.startAngle,this.endAngle,this.bombsHitbox,this.bombsHitbox2,this.bombsHitbox3,this.single,this.player);
+            }
         } 
 
         // check collisions

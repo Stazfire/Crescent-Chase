@@ -62,20 +62,22 @@ class Boss extends Phaser.GameObjects.Sprite {
         }
 
         if(!this.bossFire && !this.bossSpray && !this.bossbossCollapse) {
-            let randValue = Phaser.Math.Between(1, 2);
-            console.log(randValue);
-   
-            if(randValue == 1) {
-                this.bossFire = true;
-                this.sfxBoss.play();  // play sfx
-            }
-            else if(randValue == 2) {
-                this.bossSpray = true;
-                this.sfxBoss.play();  // play sfx
-            }
-            else if(randValue == 3) {
-                this.bossCollapse = true;
-                this.sfxBoss.play();  // play sfx
+            if(single) {
+                let randValue = Phaser.Math.Between(1, 2);
+                console.log(randValue);
+                if(randValue == 1) {
+                    this.bossFire = true;
+                    this.sfxBoss.play();  // play sfx
+                }
+                else if(randValue == 2) {
+                    this.bossSpray = true;
+                    this.sfxBoss.play();  // play sfx
+                }
+                else if(randValue == 3) {
+                    this.bossCollapse = true;
+                    this.sfxBoss.play();  // play sfx
+                }
+                
             }
             this.circle = new Phaser.Geom.Circle(this.projectileX + 82, this.projectileY + 82, this.radius); //<- radius of circle
             this.projectileX = this.x;

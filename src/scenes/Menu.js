@@ -8,14 +8,14 @@ class Menu extends Phaser.Scene {
         this.load.audio('sfx_select', './assets/blip_select12.wav');
         this.load.audio('sfx_explosion', './assets/explosion38.wav');
         this.load.audio('sfx_player', './assets/rocket_shot.wav');
-        this.load.image('Vampy', 'assets/VampyStill.png');
+        this.load.image('VampyCover', 'assets/VampyStill.png');
         this.load.image('start', 'assets/start.png');
         this.load.image('single', 'assets/singlePlayer.png');
         this.load.image('multi', 'assets/multiplayer.png');
     }
 
     create() {
-        this.cover = this.add.image(game.config.width/2, game.config.height/2 + 100, 'Vampy');
+        this.cover = this.add.image(game.config.width/2, game.config.height/2 + 100, 'VampyCover');
         //menu display
         let menuConfig = {
             fontFamily: 'Courier',
@@ -48,7 +48,7 @@ class Menu extends Phaser.Scene {
         singlePlayer.on('pointerdown', function () {
           game.scale.startFullscreen();
           game.sound.play('sfx_select');
-          game.scene.start("playScene");  
+          game.scene.start("singleScene");  
         });
 
         let multiplayer = this.add.sprite(game.config.width/2, game.config.height/2 + 280, 'multi').setInteractive({ pixelPerfect: true });
@@ -62,8 +62,10 @@ class Menu extends Phaser.Scene {
         multiplayer.on('pointerdown', function () {
           game.scale.startFullscreen();
           game.sound.play('sfx_select');
-          game.scene.start("singleScene"); 
+          game.scene.start("playScene"); 
         });
+
+        
         let start = this.add.sprite(game.config.width/2, game.config.height/2 + 80, 'start').setInteractive({ pixelPerfect: true });
         start.on('pointerover', function () {
             this.setTint(0xff0000);

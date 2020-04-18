@@ -42,8 +42,6 @@ class Play extends Phaser.Scene {
 
         this.bossB = new Boss(this, 0, game.config.height/2 - 50, 'Vampy').setScale(1, 1).setOrigin(0,0);
 
-        
-
         // add spaceships (x3)
         this.ship01 = new Spaceship(this, this.player.x, this.player.y, 'spaceship', 0).setOrigin(0,0);
         this.ship02 = new Spaceship(this, this.player.x, this.player.y, 'spaceship', 0).setOrigin(0,0);
