@@ -13,7 +13,7 @@ class Menu extends Phaser.Scene {
         this.load.image('single', 'assets/singlePlayer.png');
         this.load.image('multi', 'assets/multiplayer.png');
         // load images/tile sprites
-        this.load.image('player', './assets/player.png');
+        
         this.load.image('spaceship', './assets/spaceship.png');
         this.load.image('starfield', './assets/starySky.png');
         this.load.image('mountains', './assets/mountains.png');
@@ -23,6 +23,7 @@ class Menu extends Phaser.Scene {
         this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 18, frameHeight: 8, startFrame: 0, endFrame: 9});
         this.load.spritesheet('moon', './assets/Moon.png', {frameWidth: 30, frameHeight: 30, startFrame: 0, endFrame: 11});
         this.load.spritesheet('Vampy', './assets/Vampy.png', {frameWidth: 171.8, frameHeight: 180, startFrame: 0, endFrame: 11});
+        this.load.spritesheet('player', './assets/Echo.png',{frameWidth: 140, frameHeight: 160, startFrame: 0, endFrame: 10});
     }
 
     create() {
@@ -57,6 +58,7 @@ class Menu extends Phaser.Scene {
             this.setTint();
         });
         singlePlayer.on('pointerdown', function () {
+          singlePlayer.setVisible(false);
           game.scale.startFullscreen();
           game.sound.play('sfx_select');
           game.scene.start("singleScene");  
@@ -71,6 +73,7 @@ class Menu extends Phaser.Scene {
             this.setTint();
         });
         multiplayer.on('pointerdown', function () {
+          multiplayer.setVisible(false);
           game.scale.startFullscreen();
           game.sound.play('sfx_select');
           game.scene.start("multiScene"); 

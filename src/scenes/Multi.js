@@ -28,10 +28,21 @@ class Multi extends Phaser.Scene {
             key: 'hair',
             frames: this.anims.generateFrameNumbers('Vampy', { start: 0, end: 11, first: 0}),
             frameRate: 5,
-            repeat: 100
+            repeat: 10000
+        });
+
+        this.echoAnims = this.anims.create({
+            key: 'fly',
+            frames: this.anims.generateFrameNumbers('player', { start: 0, end: 10, first: 0}),
+            frameRate: 40,
+            repeat: 10000
         });
 
         this.bossB = new Boss(this, 0, game.config.height/2 - 50, 'Vampy').setScale(1, 1).setOrigin(0,0);
+
+        this.bossB.anims.play('hair');
+        this.player.anims.play('fly');
+
 
         // add spaceships (x3)
         this.ship01 = new Spaceship(this, this.player.x, this.player.y, 'spaceship', 0).setOrigin(0,0);
@@ -162,7 +173,7 @@ class Multi extends Phaser.Scene {
         HPConfig.fixedWidth = 0;
 
         this.addEvent();
-        this.bossB.anims.play('hair');
+        
 
 
     }
@@ -277,7 +288,6 @@ class Multi extends Phaser.Scene {
         // score increment and repaint
         this.p1Score += ship.points;
         this.scoreLeft.text = this.p1Score;
-        
         
     }
 
