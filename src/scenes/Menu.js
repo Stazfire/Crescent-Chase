@@ -8,9 +8,14 @@ class Menu extends Phaser.Scene {
         this.load.audio('sfx_select', './assets/blip_select12.wav');
         this.load.audio('sfx_explosion', './assets/explosion38.wav');
         this.load.audio('sfx_player', './assets/rocket_shot.wav');
+        this.load.image('Vampy', 'assets/VampyStill.png');
+        this.load.image('start', 'assets/start.png');
+        this.load.image('single', 'assets/singlePlayer.png');
+        this.load.image('multi', 'assets/multiplayer.png');
     }
 
     create() {
+        this.cover = this.add.image(game.config.width/2, game.config.height/2 + 100, 'Vampy');
         //menu display
         let menuConfig = {
             fontFamily: 'Courier',
@@ -24,45 +29,61 @@ class Menu extends Phaser.Scene {
             },
             fixedWidth: 0
         }
-
-        //show menu text
-        let centerX = game.config.width/2;
-        let centerY = game.config.width/2;
-        let textSpacer = 64;
-
+        this.add.text(game.config.width/2-268, game.config.height/2-100, 'Crescent Chase', {
+            fontFamily: 'Goudy',
+            fontSize: '110px',
+            color: '#FFFFFF'
+        });
         
-        this.add.text(centerX, centerY- textSpacer, 'ROCKET PATROL', menuConfig).setOrigin(0.5);
-        this.add.text(centerX, centerY, 'Use <- -> arrows to move & (F) to fire', menuConfig).setOrigin(0.5)
-        menuConfig.backgroundColor = '#00FF00';
-        menuConfig.color = '#000';
-        this.add.text(centerX, centerY + textSpacer, 'Press <- for Multiplayer or -> for Single Player', menuConfig).setOrigin(0.5);
+        
 
+        let singlePlayer = this.add.sprite(game.config.width/2, game.config.height/2 + 180, 'single').setInteractive({ pixelPerfect: true });
+        singlePlayer.setVisible(false);
+        singlePlayer.on('pointerover', function () {
+          this.setTint(0x00f2ff);
+        });
+        singlePlayer.on('pointerout', function () {
+            this.setTint();
+        });
+        singlePlayer.on('pointerdown', function () {
+          game.scale.startFullscreen();
+          game.sound.play('sfx_select');
+          game.scene.start("playScene");  
+        });
+
+        let multiplayer = this.add.sprite(game.config.width/2, game.config.height/2 + 280, 'multi').setInteractive({ pixelPerfect: true });
+        multiplayer.setVisible(false);
+        multiplayer.on('pointerover', function () {
+          this.setTint(0xCA00FF);
+        });
+        multiplayer.on('pointerout', function () {
+            this.setTint();
+        });
+        multiplayer.on('pointerdown', function () {
+          game.scale.startFullscreen();
+          game.sound.play('sfx_select');
+          game.scene.start("singleScene"); 
+        });
+        let start = this.add.sprite(game.config.width/2, game.config.height/2 + 80, 'start').setInteractive({ pixelPerfect: true });
+        start.on('pointerover', function () {
+            this.setTint(0xff0000);
+        });
+        start.on('pointerout', function () {
+            this.setTint();
+        });
+        start.on('pointerdown', function () {
+          singlePlayer.setVisible(true);
+          multiplayer.setVisible(true);
+        });
         // define keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 
+        
+
     }
 
     update() {
-        if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
-          // easy mode
-          game.scale.startFullscreen();
-          game.settings = {
-            spaceshipSpeed: 3,
-            gameTimer: 60000    
-          }
-          this.sound.play('sfx_select');
-          this.scene.start("playScene");    
-        }
-        if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
-          // hard mode
-          game.scale.startFullscreen();
-          game.settings = {
-            spaceshipSpeed: 4,
-            gameTimer: 45000    
-          }
-          this.sound.play('sfx_select');
-          this.scene.start("singleScene");    
-        }
-      }
+        
+    }
 }
