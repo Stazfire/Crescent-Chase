@@ -4,6 +4,7 @@ class Play extends Phaser.Scene {
         this.posX = 0;
         this.posY = 0;
         this.radius = 150;
+        this.single = false; //:)
     }
 
     preload() {
@@ -252,7 +253,7 @@ class Play extends Phaser.Scene {
         this.starySky.tilePositionX -= 0.1;
         if (!this.gameOver) {              
             this.player.update();         // update player sprite
-            this.bossB.update(this.bombs,this.bombs2,this.bombs3,this.startAngle,this.endAngle,this.bombsHitbox,this.bombsHitbox2,this.bombsHitbox3);
+            this.bossB.update(this.bombs,this.bombs2,this.bombs3,this.startAngle,this.endAngle,this.bombsHitbox,this.bombsHitbox2,this.bombsHitbox3,this.single,this.player);
             
         } 
 

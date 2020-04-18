@@ -22,45 +22,61 @@ class Boss extends Phaser.GameObjects.Sprite {
         this.spraySpeed = 15;
         this.collapseSpeed = 6;
         this.collapse = false;
+        this.speed = 5;
         
     }
 
-    update(bombs,bombs2,bombs3,startAngle,endAngle,hitBox,hitBox2,hitBox3,time,delta) {
-        
-        let speed = 5;
-        //move left/right
-        if(keyLEFT.isDown || keyA.isDown && this.x >= 0) {
-            this.x -= speed;
-        }
-        else if(keyRIGHT.isDown || keyD.isDown && this.x <= 278) {
-            this.x += speed;
-        }
-        
-        //move UP/DOWN
-        if(keyUP.isDown || keyW.isDown && this.y >= 40) {
-            this.y -= speed;
-        }
-        else if(keyDOWN.isDown || keyS.isDown && this.y <= 500) {
-            this.y += speed;
-        }
-        
-        // fire button
-        if (Phaser.Input.Keyboard.JustDown(keyI) && !this.bossFire && !this.bossSpray && !this.bossCollapse) {
-            this.bossFire = true;
-            this.sfxBoss.play();  // play sfx
-        }
-        // spray button
-        if (Phaser.Input.Keyboard.JustDown(keyO) && !this.bossSpray && !this.bossFire && !this.bossCollapse) {
-            this.bossSpray = true;
-            this.sfxBoss.play();  // play sfx
-        }
-        // collapse button
-        if (Phaser.Input.Keyboard.JustDown(keyP) && !this.bossSpray && !this.bossFire && !this.bossCollapse) {
-            this.bossCollapse = true;
-            this.sfxBoss.play();  // play sfx
+    update(bombs,bombs2,bombs3,startAngle,endAngle,hitBox,hitBox2,hitBox3,single,player,time,delta) {
+        if(!single) {
+            //move left/right
+            if(keyLEFT.isDown || keyA.isDown && this.x >= 0) {
+                this.x -= this.speed;
+            }
+            else if(keyRIGHT.isDown || keyD.isDown && this.x <= 278) {
+                this.x += this.speed;
+            }
+            
+            //move UP/DOWN
+            if(keyUP.isDown || keyW.isDown && this.y >= 40) {
+                this.y -= this.speed;
+            }
+            else if(keyDOWN.isDown || keyS.isDown && this.y <= 500) {
+                this.y += this.speed;
+            }
+            
+            // fire button
+            if (Phaser.Input.Keyboard.JustDown(keyI) && !this.bossFire && !this.bossSpray && !this.bossCollapse) {
+                this.bossFire = true;
+                this.sfxBoss.play();  // play sfx
+            }
+            // spray button
+            if (Phaser.Input.Keyboard.JustDown(keyO) && !this.bossSpray && !this.bossFire && !this.bossCollapse) {
+                this.bossSpray = true;
+                this.sfxBoss.play();  // play sfx
+            }
+            // collapse button
+            if (Phaser.Input.Keyboard.JustDown(keyP) && !this.bossSpray && !this.bossFire && !this.bossCollapse) {
+                this.bossCollapse = true;
+                this.sfxBoss.play();  // play sfx
+            }
         }
 
         if(!this.bossFire && !this.bossSpray && !this.bossbossCollapse) {
+            let randValue = Phaser.Math.Between(1, 2);
+            console.log(randValue);
+   
+            if(randValue == 1) {
+                this.bossFire = true;
+                this.sfxBoss.play();  // play sfx
+            }
+            else if(randValue == 2) {
+                this.bossSpray = true;
+                this.sfxBoss.play();  // play sfx
+            }
+            else if(randValue == 3) {
+                this.bossCollapse = true;
+                this.sfxBoss.play();  // play sfx
+            }
             this.circle = new Phaser.Geom.Circle(this.projectileX + 82, this.projectileY + 82, this.radius); //<- radius of circle
             this.projectileX = this.x;
             this.projectileY = this.y;

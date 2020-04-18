@@ -4,6 +4,7 @@ class Single extends Phaser.Scene {
         this.posX = 0;
         this.posY = 0;
         this.radius = 150;
+        this.single = true; //:C
     }
 
     preload() {
@@ -39,7 +40,7 @@ class Single extends Phaser.Scene {
             repeat: 100
         });
 
-        this.bossB = new Boss_single(this, 0, game.config.height/2 - 50, 'Vampy').setScale(1, 1).setOrigin(0,0);
+        this.bossB = new Boss(this, 0, game.config.height/2 - 50, 'Vampy').setScale(1, 1).setOrigin(0,0);
         this.bossB.anims.play('hair');
         
 
@@ -269,7 +270,7 @@ class Single extends Phaser.Scene {
         this.starySky.tilePositionX -= 0.1;
         if (!this.gameOver) {              
             this.player.update();         // update player sprite
-            this.bossB.update(this.bombs,this.bombs2,this.bombs3,this.startAngle,this.endAngle,this.bombsHitbox,this.bombsHitbox2,this.bombsHitbox3);
+            this.bossB.update(this.bombs,this.bombs2,this.bombs3,this.startAngle,this.endAngle,this.bombsHitbox,this.bombsHitbox2,this.bombsHitbox3,this.single,this.player);
             
         } 
 
