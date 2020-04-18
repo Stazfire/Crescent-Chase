@@ -59,7 +59,7 @@ class Multi extends Phaser.Scene {
             key: 'spin',
             frames: this.anims.generateFrameNumbers('moon', { start: 0, end: 11, first: 0}),
             frameRate: 5,
-            repeat: 100
+            repeat: 300
         });
 
         //energy balls
