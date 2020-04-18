@@ -7,7 +7,7 @@ class Boss extends Phaser.GameObjects.Sprite {
         scene.add.existing(this);
         this.bossFire = false; //track boss's firing status
         this.bossSpray = false;
-        this.bossLockOn = false;
+        this.bossCollapse = false;
         this.sfxBoss = scene.sound.add('sfx_player'); // add boss sfx
         this.projectileX;
         this.projectileY;
@@ -15,29 +15,19 @@ class Boss extends Phaser.GameObjects.Sprite {
         this.projectileY2;
         this.projectileX3;
         this.projectileY3;
-        this.cyclone;
-        this.cyclonePos;
-        this.cyclone2;
-        this.cyclonePos2;
-        this.cyclone3;
-        this.cyclonePos3;
         this.projectileSpeed = 20;
         this.radius = 150;
         this.radius2 = 150;
         this.radius3 = 150;
         this.spraySpeed = 10;
+        this.collapseSpeed = 6;
         this.distanceX;
         this.distanceY;
         this.speed = 1;
         this.direction = 0;
         this.xSpeed = 0;
         this.ySpeed = 0;
-        this.boxClone;
-        this.boxClone2;
-        this.boxClone3;
-        this.boxCyclonePos;
-        this.boxCyclonePos2;
-        this.boxCyclonePos3;
+        this.collapse = false;
         
     }
 
@@ -61,23 +51,23 @@ class Boss extends Phaser.GameObjects.Sprite {
         }
         
         // fire button
-        if (Phaser.Input.Keyboard.JustDown(keyI) && !this.bossFire && !this.bossSpray) {
+        if (Phaser.Input.Keyboard.JustDown(keyI) && !this.bossFire && !this.bossSpray && !this.bossCollapse) {
             this.bossFire = true;
             this.sfxBoss.play();  // play sfx
         }
         // spray button
-        if (Phaser.Input.Keyboard.JustDown(keyO) && !this.bossSpray && !this.bossFire) {
+        if (Phaser.Input.Keyboard.JustDown(keyO) && !this.bossSpray && !this.bossFire && !this.bossCollapse) {
             this.bossSpray = true;
             this.sfxBoss.play();  // play sfx
         }
-        // lockon button
-        if (Phaser.Input.Keyboard.JustDown(keyP) && !this.bossSpray && !this.bossFire && !this.bossLockOn) {
-            this.bossLockOn = true;
+        // collapse button
+        if (Phaser.Input.Keyboard.JustDown(keyP) && !this.bossSpray && !this.bossFire && !this.bossCollapse) {
+            this.bossCollapse = true;
             this.sfxBoss.play();  // play sfx
         }
 
-        if(!this.bossFire && !this.bossSpray && !this.bossLockOn) {
-            this.circle = new Phaser.Geom.Circle(this.projectileX + 80, this.projectileY + 80, this.radius); //<- radius of circle
+        if(!this.bossFire && !this.bossSpray && !this.bossbossCollapse) {
+            this.circle = new Phaser.Geom.Circle(this.projectileX + 82, this.projectileY + 82, this.radius); //<- radius of circle
             this.projectileX = this.x;
             this.projectileY = this.y;
             this.projectileX2 = this.x;
@@ -85,7 +75,7 @@ class Boss extends Phaser.GameObjects.Sprite {
             this.projectileX3 = this.x;
             this.projectileY3 = this.y;
 
-            this.cyclonePos = Phaser.Actions.SetXY([this.circle], this.projectileX + 80, this.projectileY + 80);
+            this.cyclonePos = Phaser.Actions.SetXY([this.circle], this.projectileX + 82, this.projectileY + 82);
 
             this.cyclone = Phaser.Actions.PlaceOnCircle(
                 bombs.getChildren(), 
@@ -102,11 +92,11 @@ class Boss extends Phaser.GameObjects.Sprite {
         }
 
         //when firing
-        if(this.bossFire && !this.bossSpray && !this.bossLockOn) {
-            this.circle = new Phaser.Geom.Circle(this.projectileX + 80, this.projectileY + 80, this.radius); //<- radius of circle
+        if(this.bossFire && !this.bossSpray && !this.bossCollapse) {
+            this.circle = new Phaser.Geom.Circle(this.projectileX + 82, this.projectileY + 82, this.radius); //<- radius of circle
             this.projectileX = this.projectileX + this.projectileSpeed;
             if(this.projectileX < 1300) {
-                this.cyclonePos = Phaser.Actions.SetXY([this.circle], this.projectileX + 80, this.projectileY + 80);
+                this.cyclonePos = Phaser.Actions.SetXY([this.circle], this.projectileX + 82, this.projectileY + 82);
     
                 this.cyclone = Phaser.Actions.PlaceOnCircle(
                     bombs.getChildren(), 
@@ -124,13 +114,13 @@ class Boss extends Phaser.GameObjects.Sprite {
         }
 
         //when spraying
-        if(this.bossSpray && !this.bossFire && !this.bossLockOn) {
-            this.newCircle = new Phaser.Geom.Circle(this.projectileX + 80, this.projectileY + 80, this.radius); //<- radius of circle
-            this.newCircle2 = new Phaser.Geom.Circle(this.projectileX2 + 80, this.projectileY2 + 80, this.radius2); //<- radius of circle
-            this.newCircle3 = new Phaser.Geom.Circle(this.projectileX3 + 80, this.projectileY3 + 80, this.radius3); //<- radius of circle
+        if(this.bossSpray && !this.bossFire && !this.bossCollapse) {
+            this.newCircle = new Phaser.Geom.Circle(this.projectileX + 82, this.projectileY + 82, this.radius); //<- radius of circle
+            this.newCircle2 = new Phaser.Geom.Circle(this.projectileX2 + 82, this.projectileY2 + 82, this.radius2); //<- radius of circle
+            this.newCircle3 = new Phaser.Geom.Circle(this.projectileX3 + 82, this.projectileY3 + 82, this.radius3); //<- radius of circle
             this.radius = this.radius + this.spraySpeed;
             
-            this.cyclonePos = Phaser.Actions.SetXY([this.newCircle], this.projectileX + 80, this.projectileY + 80);
+            this.cyclonePos = Phaser.Actions.SetXY([this.newCircle], this.projectileX + 82, this.projectileY + 82);
 
             this.cyclone = Phaser.Actions.PlaceOnCircle(
                 bombs.getChildren(), 
@@ -150,7 +140,7 @@ class Boss extends Phaser.GameObjects.Sprite {
                     this.projectileY2 = this.y;
                 }
                 this.radius2 = this.radius2 + this.spraySpeed;
-                this.cyclonePos2 = Phaser.Actions.SetXY([this.newCircle2], this.projectileX2 + 80, this.projectileY2 + 80);
+                this.cyclonePos2 = Phaser.Actions.SetXY([this.newCircle2], this.projectileX2 + 82, this.projectileY2 + 82);
 
                 this.cyclone2 = Phaser.Actions.PlaceOnCircle(
                     bombs2.getChildren(), 
@@ -170,7 +160,7 @@ class Boss extends Phaser.GameObjects.Sprite {
                     this.projectileY3 = this.y;
                 }
                 this.radius3 = this.radius3 + this.spraySpeed;
-                this.cyclonePos3 = Phaser.Actions.SetXY([this.newCircle3], this.projectileX3 + 80, this.projectileY3 + 80);
+                this.cyclonePos3 = Phaser.Actions.SetXY([this.newCircle3], this.projectileX3 + 82, this.projectileY3 + 82);
 
                 this.cyclone3 = Phaser.Actions.PlaceOnCircle(
                     bombs3.getChildren(), 
@@ -183,10 +173,32 @@ class Boss extends Phaser.GameObjects.Sprite {
             }
         }
 
-        //when lockon
-        if(this.bossLockOn && !this.bossSpray && !this.bossFire) {
-            console.log("locking on");
-            this.reset();
+        //when collapse
+        if(this.bossCollapse && !this.bossSpray && !this.bossFire) {
+            this.collapseCircle = new Phaser.Geom.Circle(this.projectileX + 82, this.projectileY + 82, this.radius); //<- radius of circle
+            if(!this.collapse) {
+                this.radius = this.radius - this.collapseSpeed;
+                if(this.radius <= 10) {
+                    this.collapse = true;
+                }
+            }
+            else {
+                this.radius = this.radius + this.collapseSpeed;
+                if(this.radius >= 150) {
+                    this.reset();
+                }
+            }
+
+            this.cycloneCollapsePos = Phaser.Actions.SetXY([this.collapseCircle], this.projectileX + 82, this.projectileY + 82);
+
+            this.cycloneCollapse = Phaser.Actions.PlaceOnCircle(
+                bombs.getChildren(), 
+                this.collapseCircle, 
+            );
+            this.boxCloneCollapse = Phaser.Actions.PlaceOnCircle(
+                hitBox.getChildren(), 
+                this.collapseCircle, 
+            );
         }
 
         //reset when miss
@@ -202,7 +214,8 @@ class Boss extends Phaser.GameObjects.Sprite {
     reset() {
         this.bossFire = false;
         this.bossSpray = false;
-        this.bossLockOn = false;
+        this.bossCollapse = false;
+        this.collapse = false;
         this.projectileX = this.x;
         this.projectileY = this.y;
         this.projectileX2 = this.x;

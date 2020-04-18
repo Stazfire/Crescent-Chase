@@ -27,7 +27,7 @@ class Play extends Phaser.Scene {
         this.starfield = this.add.tileSprite(0, 0, 1100, 680, 'starfield').setScale(1, 1).setOrigin(0, 0);
 
         // add player (p1)
-        this.player = this.physics.add.sprite(400, 300, 'player');
+        this.player = this.physics.add.sprite(game.config.width - 100, game.config.height/2, 'player');
 
         this.vampyAnims = this.anims.create({
             key: 'hair',
@@ -206,7 +206,7 @@ class Play extends Phaser.Scene {
                 this.player.x += pointer.movementX/this.slow;
                 this.player.y += pointer.movementY/this.slow;
                 //  Keep the player within the game
-                this.player.x  = Phaser.Math.Clamp(this.player.x , 0, 960);
+                this.player.x  = Phaser.Math.Clamp(this.player.x , 0, 1000);
                 this.player.y  = Phaser.Math.Clamp(this.player.y , 40, 640);
             }
         }, this);

@@ -5,8 +5,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   
       // add object to existing scene
       scene.add.existing(this);
-      this.isFiring = false; //track player's firing status
-      this.sfxPlayer = scene.sound.add('sfx_player'); // add player sfx
+
       
     }
 
