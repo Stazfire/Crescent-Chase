@@ -62,10 +62,10 @@ class Menu extends Phaser.Scene {
         multiplayer.on('pointerdown', function () {
           game.scale.startFullscreen();
           game.sound.play('sfx_select');
-          game.scene.start("playScene"); 
+          game.scene.start("multiScene"); 
         });
 
-        
+
         let start = this.add.sprite(game.config.width/2, game.config.height/2 + 80, 'start').setInteractive({ pixelPerfect: true });
         start.on('pointerover', function () {
             this.setTint(0xff0000);

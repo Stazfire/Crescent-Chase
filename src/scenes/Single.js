@@ -6,6 +6,7 @@ class Single extends Phaser.Scene {
         this.radius = 150;
         this.single = true; //:C
         this.startFiring = 0;
+        this.timer = 0;
     }
 
     preload() {
@@ -172,11 +173,9 @@ class Single extends Phaser.Scene {
         }
         this.timeRight = this.add.text(400, 54, this.timer, timerConfig);
 
-        // 60-second play clock
         HPConfig.fixedWidth = 0;
 
-        this.addEvent(HPConfig);
-        
+        this.addEvent();
 
         this.follower = { t: 0, vec: new Phaser.Math.Vector2() };
         this.path = new Phaser.Curves.Path(120, 280); //move path
@@ -197,23 +196,10 @@ class Single extends Phaser.Scene {
         }, callbackScope: this, loop: true });
     }
 
-    addEvent(HPConfig) {
-        // game over flag
-        let gameOver = false;
-        let x = 10;
-        let timer = 60;
-        this.time.addEvent({ delay: x, callback: () => {
-            this.ship01.update(60,this.player);           // update spaceships (x3)
-        }, callbackScope: this, loop: true });
+    addEvent() {
+
         this.time.addEvent({ delay: 1000, callback: () => { 
-            if(timer>=1) {
-                timer--;
-            }
-            else {
-                this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', HPConfig).setOrigin(0.5);
-                this.add.text(game.config.width/2, game.config.height/2 + 64, '(F)ire to Restart or <- for Menu', HPConfig).setOrigin(0.5);
-                this.gameOver = true;
-            }
+                this.timer++;
         }, callbackScope: this, loop: true });
 
         game.canvas.addEventListener('mousedown', function () {
