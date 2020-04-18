@@ -146,8 +146,6 @@ class Single extends Phaser.Scene {
         }
         this.scoreLeft = this.add.text(69, 54, this.bossHP, HPConfig);
 
-        // timer
-        this.timer = 60;
         // timer display
         let timerConfig = {
             fontFamily: 'Courier',
