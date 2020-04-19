@@ -25,6 +25,8 @@ class Multi extends Phaser.Scene {
         this.player = this.physics.add.sprite(game.config.width - 100, game.config.height/2, 'player');
         this.playerHitbox = this.physics.add.sprite(game.config.width - 100, game.config.height/2, 'ball');
         this.playerHitbox.setVisible(false);
+
+        this.playerHP = new PlayerHealth(this, 1095, 0);
         
         this.vampyAnims = this.anims.create({
             key: 'hair',
@@ -46,6 +48,8 @@ class Multi extends Phaser.Scene {
 
         this.bossB.anims.play('hair');
         this.player.anims.play('fly');
+
+        this.bossHP = new BossHealth(this, 0, 0);
 
 
         // add spaceships (x3)
@@ -135,6 +139,11 @@ class Multi extends Phaser.Scene {
         this.physics.add.overlap(this.bossHitbox, this.bullet, () => {
             this.bullet.setFiring();
             this.sound.play('sfx_explosion');
+            if(this.bossHP.decrease(2)) {
+                this.gameOver = true;
+                console.log('You Win');
+            }
+
         });
 
 
@@ -146,31 +155,28 @@ class Multi extends Phaser.Scene {
 
         this.physics.add.overlap(this.playerHitbox, this.bombsHitbox, () => {
             this.sound.play('sfx_explosion');
+            if(this.playerHP.decrease(80)) {
+                this.gameOver = true;
+                console.log('You Lose');
+            }
         });
         this.physics.add.overlap(this.playerHitbox, this.bombsHitbox2, () => {
             this.sound.play('sfx_explosion');
+            if(this.playerHP.decrease(80)) {
+                this.gameOver = true;
+                console.log('You Lose');
+            }
         });
         this.physics.add.overlap(this.playerHitbox, this.bombsHitbox3, () => {
             this.sound.play('sfx_explosion');
+            if(this.playerHP.decrease(80)) {
+                this.gameOver = true;
+                console.log('You Lose');
+            }
         });
         
         
-        // score
-        this.bossHP = 100000;
-        // score display
-        let HPConfig = {
-            fontFamily: 'Courier',
-            fontSize: '28px',
-            backgroundColor: '#F3B141',
-            color: '#843605',
-            align: 'right',
-            padding: {
-                top: 5,
-                bottom: 5,
-            },
-            fixedWidth: 100
-        }
-        this.scoreLeft = this.add.text(69, 54, this.bossHP, HPConfig);
+        
 
         // timer display
         let timerConfig = {
@@ -178,17 +184,15 @@ class Multi extends Phaser.Scene {
             fontSize: '28px',
             backgroundColor: '#F3B141',
             color: '#843605',
-            align: 'left',
+            align: 'center',
             padding: {
                 top: 5,
                 bottom: 5,
             },
             fixedWidth: 100
         }
-        this.timeRight = this.add.text(400, 54, this.timer, timerConfig);
+        this.timeRight = this.add.text(game.config.width/2 - 50, 0, this.timer, timerConfig);
 
-        // 60-second play clock
-        HPConfig.fixedWidth = 0;
 
         this.addEvent();
         
@@ -251,31 +255,32 @@ class Multi extends Phaser.Scene {
     }
 
     addEvent() {
-
-        this.time.addEvent({ delay: 1000, callback: () => { 
+        if(!this.gameOver) {
+            this.time.addEvent({ delay: 1000, callback: () => { 
                 this.timer++;
-        }, callbackScope: this, loop: true });
+            }, callbackScope: this, loop: true });
 
-        game.canvas.addEventListener('mousedown', function () {
-            game.input.mouse.requestPointerLock();
-        });
+            game.canvas.addEventListener('mousedown', function () {
+                game.input.mouse.requestPointerLock();
+            });
 
-        this.slow = 1;
-        //  Input events
-        this.input.on('pointermove', function (pointer) {
-            if (this.input.mouse.locked) {
-                
-                this.player.x += pointer.movementX/this.slow;
-                this.playerHitbox.x += pointer.movementX/this.slow;
-                this.player.y += pointer.movementY/this.slow;
-                this.playerHitbox.y += pointer.movementY/this.slow;
-                //  Keep the player within the game
-                this.player.x  = Phaser.Math.Clamp(this.player.x , 10, 1090);
-                this.playerHitbox.x  = Phaser.Math.Clamp(this.playerHitbox.x , 10, 1090);
-                this.player.y  = Phaser.Math.Clamp(this.player.y , 20, 660);
-                this.playerHitbox.y  = Phaser.Math.Clamp(this.playerHitbox.y , 20, 660);
-            }
-        }, this);
+            this.slow = 1;
+            //  Input events
+            this.input.on('pointermove', function (pointer) {
+                if (this.input.mouse.locked) {
+                    
+                    this.player.x += pointer.movementX/this.slow;
+                    this.playerHitbox.x += pointer.movementX/this.slow;
+                    this.player.y += pointer.movementY/this.slow;
+                    this.playerHitbox.y += pointer.movementY/this.slow;
+                    //  Keep the player within the game
+                    this.player.x  = Phaser.Math.Clamp(this.player.x , 10, 1090);
+                    this.playerHitbox.x  = Phaser.Math.Clamp(this.playerHitbox.x , 10, 1090);
+                    this.player.y  = Phaser.Math.Clamp(this.player.y , 20, 660);
+                    this.playerHitbox.y  = Phaser.Math.Clamp(this.playerHitbox.y , 20, 660);
+                }
+            }, this);
+        }
     }
 
     setKey() {
@@ -363,9 +368,6 @@ class Multi extends Phaser.Scene {
             boom.destroy();                     // remove explosion sprite
         });
         
-        // score increment and repaint
-        this.p1Score += ship.points;
-        this.scoreLeft.text = this.p1Score;
         this.player.depth = 100;
     }
 
