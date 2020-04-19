@@ -1,4 +1,3 @@
-console.log("testing");
 let config = {
     type: Phaser.AUTO,
     scale: {
