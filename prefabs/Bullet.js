@@ -5,7 +5,7 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
   
       // add object to existing scene
       scene.add.existing(this);
-      Phaser.GameObjects.Image.call(this, scene, 0, 0, 'moon');
+      Phaser.GameObjects.Image.call(this, scene, 0, 0, 'blast');
       this.firing = false;
     }
 

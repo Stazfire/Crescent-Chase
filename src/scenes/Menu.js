@@ -24,6 +24,9 @@ class Menu extends Phaser.Scene {
         this.load.image('mountains', './assets/mountains.png');
         this.load.image('trees', './assets/foggyTrees.png');
         this.load.image('ball', 'assets/balls.png');
+        this.load.image('blast', 'assets/bullet.png');
+        this.load.image('logo', 'assets/logo.png');
+
         // load spritesheet
         this.load.spritesheet('explosion', './assets/trails.png', {frameWidth: 12, frameHeight: 6, startFrame: 0, endFrame: 9});
         this.load.spritesheet('moon', './assets/Moon.png', {frameWidth: 30, frameHeight: 30, startFrame: 0, endFrame: 11});
@@ -32,7 +35,7 @@ class Menu extends Phaser.Scene {
     }
 
     create() {
-        
+        this.logo = this.add.image(game.config.width/2, game.config.height/2-100, 'logo').setScale(0.5,0.5);
         this.cover = this.add.image(game.config.width/2, game.config.height/2 + 100, 'VampyCover');
         //menu display
         let menuConfig = {
@@ -47,6 +50,9 @@ class Menu extends Phaser.Scene {
             },
             fixedWidth: 0
         }
+
+        
+
         this.add.text(game.config.width/2-268, game.config.height/2-100, 'Crescent Chase', {
             fontFamily: 'Goudy',
             fontSize: '110px',

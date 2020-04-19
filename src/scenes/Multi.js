@@ -128,8 +128,8 @@ class Multi extends Phaser.Scene {
         this.bullets = this.physics.add.group({
             active: false,
             visible: false,
-            key:'moon',
-            frameQuantity: 50,
+            key:'bullet',
+            frameQuantity: 2,
             collideWorldBounds: false,
             classType: Bullet
         });

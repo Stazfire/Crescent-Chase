@@ -1,6 +1,4 @@
-console.log("hello world");
-console.log("testing123");
-
+console.log("testing");
 let config = {
     type: Phaser.AUTO,
     scale: {

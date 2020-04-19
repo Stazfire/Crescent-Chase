@@ -127,8 +127,8 @@ class Single extends Phaser.Scene {
         this.bullets = this.physics.add.group({
             active: false,
             visible: false,
-            key:'moon',
-            frameQuantity: 50,
+            key:'blast',
+            frameQuantity: 2,
             collideWorldBounds: false,
             runChildUpdate: true,
             classType: Bullet
@@ -141,7 +141,7 @@ class Single extends Phaser.Scene {
             this.sound.play('sfx_explosion');
             if(this.bossHP.decrease(2)) {
                 this.gameOver = true;
-                console.log('GameOver');
+                console.log('You Win');
             }
 
         });
