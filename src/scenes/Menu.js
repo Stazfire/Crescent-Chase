@@ -18,7 +18,7 @@ class Menu extends Phaser.Scene {
         this.load.audio('sfx_bossShot3', './assets/whip-whoosh-03.wav');
         
 
-        this.load.audio('bgm', './assets/bgm.mp3');
+        this.load.audio('bgm', './assets/bgm.wav');
         this.load.image('VampyCover', 'assets/VampyStill.png');
         this.load.image('start', 'assets/start.png');
         this.load.image('single', 'assets/singlePlayer.png');
