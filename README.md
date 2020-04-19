@@ -3,15 +3,21 @@
 Credits
 
 SFX:
-  http://freesoundeffect.net/
+
+-http://freesoundeffect.net/
   
 Code:
-  Phaser Documentation
-  Phaser Example
-  Victor Chung
+
+-Phaser Documentation
+
+-Phaser Example
+
+-Victor Chung
  
 Art:
-  Victor Chung
+
+-Victor Chung
   
 Music:
-  Victor Chung
+
+-Victor Chung
