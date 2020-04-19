@@ -8,7 +8,9 @@ class Boss extends Phaser.GameObjects.Sprite {
         this.bossFire = false; //track boss's firing status
         this.bossSpray = false;
         this.bossCollapse = false;
-        this.sfxBoss = scene.sound.add('sfx_player'); // add boss sfx
+        this.sfxBoss = scene.sound.add('sfx_bossShot'); // add boss sfx
+        this.sfxBoss2 = scene.sound.add('sfx_bossShot2'); // add boss sfx
+        this.sfxBoss3 = scene.sound.add('sfx_bossShot3'); // add boss sfx
         this.projectileX;
         this.projectileY;
         this.projectileX2;
@@ -57,12 +59,12 @@ class Boss extends Phaser.GameObjects.Sprite {
             // spray button
             if (Phaser.Input.Keyboard.JustDown(keyO) && !this.bossSpray && !this.bossFire && !this.bossCollapse) {
                 this.bossSpray = true;
-                this.sfxBoss.play();  // play sfx
+                this.sfxBoss3.play();  // play sfx
             }
             // collapse button
             if (Phaser.Input.Keyboard.JustDown(keyP) && !this.bossSpray && !this.bossFire && !this.bossCollapse) {
                 this.bossCollapse = true;
-                this.sfxBoss.play();  // play sfx
+                this.sfxBoss2.play();  // play sfx
             }
         }
 
@@ -91,7 +93,7 @@ class Boss extends Phaser.GameObjects.Sprite {
             );
             if(single) {
                 let randValue = Phaser.Math.Between(1, 2);
-                if(this.rep > 6) {
+                if(this.rep > 5) {
                     randValue = 3;
                 }
                 if(randValue == 1) {
@@ -102,12 +104,12 @@ class Boss extends Phaser.GameObjects.Sprite {
                 else if(randValue == 2) {
                     this.rep = this.rep + randValue;
                     this.bossSpray = true;
-                    this.sfxBoss.play();  // play sfx
+                    this.sfxBoss3.play();  // play sfx
                 }
                 else if(randValue == 3) {
                     this.bossCollapse = true;
                     this.rep = 0;
-                    this.sfxBoss.play();  // play sfx
+                    this.sfxBoss2.play();  // play sfx
                 }
                 
             }

@@ -6,6 +6,8 @@ class Multi extends Phaser.Scene {
         this.radius = 150;
         this.single = false; //:c
         this.timer = 0;
+        this.bossDPH = 120;
+        this.playerDPH = 3;
 
     }
 
@@ -16,6 +18,7 @@ class Multi extends Phaser.Scene {
     create() {
 
         this.setKey();
+        this.sfxWin = game.sound.add('sfx_victory');
         this.BGM = game.sound.add('bgm');
         this.BGM.loop = true;
         this.BGM.play();
@@ -140,10 +143,9 @@ class Multi extends Phaser.Scene {
 
         this.physics.add.overlap(this.bossHitbox, this.bullet, () => {
             this.bullet.setFiring();
-            this.sound.play('sfx_explosion');
-            if(this.bossHP.decrease(4)) {
+            this.sound.play('sfx_playerShot');
+            if(this.bossHP.decrease(this.playerDPH)) {
                 this.gameOver = true;
-                console.log('You Win');
             }
 
         });
@@ -157,23 +159,20 @@ class Multi extends Phaser.Scene {
 
         this.physics.add.overlap(this.playerHitbox, this.bombsHitbox, () => {
             this.sound.play('sfx_explosion');
-            if(this.playerHP.decrease(80)) {
+            if(this.playerHP.decrease(this.bossDPH)) {
                 this.gameOver = true;
-                console.log('You Lose');
             }
         });
         this.physics.add.overlap(this.playerHitbox, this.bombsHitbox2, () => {
             this.sound.play('sfx_explosion');
-            if(this.playerHP.decrease(80)) {
+            if(this.playerHP.decrease(this.bossDPH)) {
                 this.gameOver = true;
-                console.log('You Lose');
             }
         });
         this.physics.add.overlap(this.playerHitbox, this.bombsHitbox3, () => {
             this.sound.play('sfx_explosion');
-            if(this.playerHP.decrease(80)) {
+            if(this.playerHP.decrease(this.bossDPH)) {
                 this.gameOver = true;
-                console.log('You Lose');
             }
         });
         
@@ -336,6 +335,7 @@ class Multi extends Phaser.Scene {
             this.timer = 0;
             this.BGM.loop = false;
             this.BGM.stop();
+            this.sfxWin.play();
             game.input.mouse.releasePointerLock();
             this.scene.start("menuScene");
         }

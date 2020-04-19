@@ -8,6 +8,16 @@ class Menu extends Phaser.Scene {
         this.load.audio('sfx_select', './assets/blip_select12.wav');
         this.load.audio('sfx_explosion', './assets/explosion38.wav');
         this.load.audio('sfx_player', './assets/rocket_shot.wav');
+        this.load.audio('sfx_playerShot', './assets/velcro-strap-2.wav');
+        this.load.audio('sfx_defeat', './assets/lose-the-game-01-sound-effect-65512085.mp3');
+        this.load.audio('sfx_victory', './assets/simple-fanfare-horn-2-sound-effect-32891846.mp3');
+        
+        
+        this.load.audio('sfx_bossShot', './assets/weapon-air-swish-sound-effect-42218018.mp3');
+        this.load.audio('sfx_bossShot2', './assets/broadsword-cutting-air-sound-effect-24414063.mp3');
+        this.load.audio('sfx_bossShot3', './assets/whip-whoosh-03.wav');
+        
+
         this.load.audio('bgm', './assets/bgm.mp3');
         this.load.image('VampyCover', 'assets/VampyStill.png');
         this.load.image('start', 'assets/start.png');

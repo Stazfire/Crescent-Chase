@@ -7,6 +7,9 @@ class Single extends Phaser.Scene {
         this.single = true; //:C
         this.startFiring = 0;
         this.timer = 0;
+        this.victory = false;
+        this.bossDPH = 80;
+        this.playerDPH = 1;
     }
 
     preload() {
@@ -16,6 +19,8 @@ class Single extends Phaser.Scene {
     create() {
 
         this.setKey();
+        this.sfxLose = game.sound.add('sfx_defeat');
+        this.sfxWin = game.sound.add('sfx_victory');
         this.BGM = game.sound.add('bgm');
         this.BGM.loop = true;
         this.BGM.play();
@@ -45,7 +50,7 @@ class Single extends Phaser.Scene {
         });
 
         this.bossB = new Boss(this, 0, game.config.height/2 - 50, 'Vampy').setScale(1, 1).setOrigin(0,0);
-        this.bossHitbox = this.physics.add.sprite(100, game.config.height/2 + 10, 'bossHitbox');
+        this.bossHitbox = this.physics.add.sprite(this.bossB.x, this.bossB.y, 'bossHitbox');
         this.bossHitbox.setVisible(false);
 
         this.bossHP = new BossHealth(this, 0, 0);
@@ -140,10 +145,9 @@ class Single extends Phaser.Scene {
 
         this.physics.add.overlap(this.bossHitbox, this.bullet, () => {
             this.bullet.setFiring();
-            this.sound.play('sfx_explosion');
-            if(this.bossHP.decrease(2)) {
-                this.gameOver = true;
-                console.log('You Win');
+            this.sound.play('sfx_playerShot');
+            if(this.bossHP.decrease(this.playerDPH)) {
+                this.victory = true;
             }
 
         });
@@ -156,23 +160,20 @@ class Single extends Phaser.Scene {
 
         this.physics.add.overlap(this.playerHitbox, this.bombsHitbox, () => {
             this.sound.play('sfx_explosion');
-            if(this.playerHP.decrease(80)) {
+            if(this.playerHP.decrease(this.bossDPH)) {
                 this.gameOver = true;
-                console.log('You Lose');
             }
         });
         this.physics.add.overlap(this.playerHitbox, this.bombsHitbox2, () => {
             this.sound.play('sfx_explosion');
-            if(this.playerHP.decrease(80)) {
+            if(this.playerHP.decrease(this.bossDPH)) {
                 this.gameOver = true;
-                console.log('You Lose');
             }
         });
         this.physics.add.overlap(this.playerHitbox, this.bombsHitbox3, () => {
             this.sound.play('sfx_explosion');
-            if(this.playerHP.decrease(80)) {
+            if(this.playerHP.decrease(this.bossDPH)) {
                 this.gameOver = true;
-                console.log('You Lose');
             }
         });
         
@@ -317,6 +318,9 @@ class Single extends Phaser.Scene {
         this.path.getPoint(this.follower.t, this.follower.vec);
         this.bossB.x = this.follower.vec.x;
         this.bossB.y = this.follower.vec.y;
+
+        this.bossHitbox.x = this.follower.vec.x + 100;
+        this.bossHitbox.y = this.follower.vec.y + 65;
         
         let pointer = this.input.activePointer;
         if(pointer.isDown) {
@@ -334,6 +338,17 @@ class Single extends Phaser.Scene {
 
         this.mountain.tilePositionX -= 4;
         this.starySky.tilePositionX -= 0.1;
+        
+        if(this.victory && !this.gameOver) {
+            this.gameOver = false;
+            this.victory = false;
+            this.timer = 0;
+            this.BGM.loop = false;
+            this.BGM.stop();
+            this.sfxWin.play();
+            game.input.mouse.releasePointerLock();
+            this.scene.start("menuScene");
+        }
         if(!this.gameOver) {              
 
             if(this.startFiring >=2) {
@@ -349,6 +364,7 @@ class Single extends Phaser.Scene {
             this.timer = 0;
             this.BGM.loop = false;
             this.BGM.stop();
+            this.sfxLose.play();
             game.input.mouse.releasePointerLock();
             this.scene.start("menuScene");
         }
