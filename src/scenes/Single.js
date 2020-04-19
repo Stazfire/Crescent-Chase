@@ -41,6 +41,9 @@ class Single extends Phaser.Scene {
         });
 
         this.bossB = new Boss(this, 0, game.config.height/2 - 50, 'Vampy').setScale(1, 1).setOrigin(0,0);
+        this.bossHitbox = this.physics.add.sprite(100, game.config.height/2 + 10, 'bossHitbox');
+        this.bossHitbox.setVisible(false);
+
         this.bossB.anims.play('hair');
         this.player.anims.play('fly');
         
@@ -116,8 +119,23 @@ class Single extends Phaser.Scene {
             collideWorldBounds: false,
             classType: Boss
         });
+        //player bullet
+        this.bullets = this.physics.add.group({
+            active: false,
+            visible: false,
+            key:'moon',
+            frameQuantity: 50,
+            collideWorldBounds: false,
+            runChildUpdate: true,
+            classType: Bullet
+        });
 
-        
+        this.bullet = this.bullets.get();
+
+        this.physics.add.overlap(this.bossHitbox, this.bullet, () => {
+            this.bullet.setFiring();
+            this.sound.play('sfx_explosion');
+        });
 
         this.bombs.playAnimation('spin');
         this.bombs2.playAnimation('spin');
@@ -126,13 +144,13 @@ class Single extends Phaser.Scene {
         this.createCircle();
 
         this.physics.add.overlap(this.playerHitbox, this.bombsHitbox, () => {
-            this.sound.play('sfx_explosion');
+            // this.sound.play('sfx_explosion');
         });
         this.physics.add.overlap(this.playerHitbox, this.bombsHitbox2, () => {
-            this.sound.play('sfx_explosion');
+            // this.sound.play('sfx_explosion');
         });
         this.physics.add.overlap(this.playerHitbox, this.bombsHitbox3, () => {
-            this.sound.play('sfx_explosion');
+            // this.sound.play('sfx_explosion');
         });
         
         
@@ -305,12 +323,13 @@ class Single extends Phaser.Scene {
         this.mountain.tilePositionX -= 4;
         this.starySky.tilePositionX -= 0.1;
         if (!this.gameOver) {              
-            this.player.update();         // update player sprite
+
             if(this.startFiring >=3) {
                 this.bombs.getChildren().forEach(function() {
                     this.bombs.setVisible(true);
                 }, this);
-                this.bossB.update(this.bombs,this.bombs2,this.bombs3,this.startAngle,this.endAngle,this.bombsHitbox,this.bombsHitbox2,this.bombsHitbox3,this.single,this.playerHitbox);
+                this.bullet.update(this.player.x,this.player.y);
+                this.bossB.update(this.bombs,this.bombs2,this.bombs3,this.startAngle,this.endAngle,this.bombsHitbox,this.bombsHitbox2,this.bombsHitbox3,this.single,this.playerHitbox,this.bossHitbox);
             }
         } 
 

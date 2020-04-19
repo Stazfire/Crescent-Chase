@@ -27,22 +27,26 @@ class Boss extends Phaser.GameObjects.Sprite {
         
     }
 
-    update(bombs,bombs2,bombs3,startAngle,endAngle,hitBox,hitBox2,hitBox3,single,player,time,delta) {
+    update(bombs,bombs2,bombs3,startAngle,endAngle,hitBox,hitBox2,hitBox3,single,player,bossHitbox) {
         if(!single) {
             //move left/right
             if(keyLEFT.isDown || keyA.isDown && this.x >= 0) {
                 this.x -= this.speed;
+                bossHitbox.x -= this.speed;
             }
             else if(keyRIGHT.isDown || keyD.isDown && this.x <= 278) {
                 this.x += this.speed;
+                bossHitbox.x += this.speed;
             }
             
             //move UP/DOWN
             if(keyUP.isDown || keyW.isDown && this.y >= 40) {
                 this.y -= this.speed;
+                bossHitbox.y -= this.speed;
             }
             else if(keyDOWN.isDown || keyS.isDown && this.y <= 500) {
                 this.y += this.speed;
+                bossHitbox.y += this.speed;
             }
             
             // fire button

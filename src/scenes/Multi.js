@@ -4,9 +4,9 @@ class Multi extends Phaser.Scene {
         this.posX = 0;
         this.posY = 0;
         this.radius = 150;
-        this.single = false; //:)
+        this.single = false; //:c
         this.timer = 0;
-        this.gameStart = false;
+
     }
 
     preload() {
@@ -14,7 +14,6 @@ class Multi extends Phaser.Scene {
     }
 
     create() {
-        
 
         this.setKey();
 
@@ -42,6 +41,8 @@ class Multi extends Phaser.Scene {
         });
 
         this.bossB = new Boss(this, 0, game.config.height/2 - 50, 'Vampy').setScale(1, 1).setOrigin(0,0);
+        this.bossHitbox = this.physics.add.sprite(100, game.config.height/2 + 10, 'bossHitbox');
+        this.bossHitbox.setVisible(false);
 
         this.bossB.anims.play('hair');
         this.player.anims.play('fly');
@@ -119,7 +120,23 @@ class Multi extends Phaser.Scene {
             classType: Boss
         });
 
-        
+        //player bullet
+        this.bullets = this.physics.add.group({
+            active: false,
+            visible: false,
+            key:'moon',
+            frameQuantity: 50,
+            collideWorldBounds: false,
+            classType: Bullet
+        });
+
+        this.bullet = this.bullets.get();
+
+        this.physics.add.overlap(this.bossHitbox, this.bullet, () => {
+            this.bullet.setFiring();
+            this.sound.play('sfx_explosion');
+        });
+
 
         this.bombs.playAnimation('spin');
         this.bombs2.playAnimation('spin');
@@ -201,7 +218,6 @@ class Multi extends Phaser.Scene {
             click.setVisible(false);
             vampyDisplay.setVisible(false);
             echoDisplay.setVisible(false);
-            this.gameStart = true;
         });
         click.on('pointerdown', function () {
             controlsBack.setVisible(false);
@@ -209,7 +225,6 @@ class Multi extends Phaser.Scene {
             click.setVisible(false);
             vampyDisplay.setVisible(false);
             echoDisplay.setVisible(false);
-            this.gameStart = true;
         });
         controls.on('pointerdown', function () {
             controlsBack.setVisible(false);
@@ -217,7 +232,6 @@ class Multi extends Phaser.Scene {
             click.setVisible(false);
             vampyDisplay.setVisible(false);
             echoDisplay.setVisible(false);
-            this.gameStart = true;
         });
         echoDisplay.on('pointerdown', function () {
             controlsBack.setVisible(false);
@@ -225,7 +239,6 @@ class Multi extends Phaser.Scene {
             click.setVisible(false);
             vampyDisplay.setVisible(false);
             echoDisplay.setVisible(false);
-            this.gameStart = true;
         });
         vampyDisplay.on('pointerdown', function () {
             controlsBack.setVisible(false);
@@ -233,7 +246,6 @@ class Multi extends Phaser.Scene {
             click.setVisible(false);
             vampyDisplay.setVisible(false);
             echoDisplay.setVisible(false);
-            this.gameStart = true;
         });
 
     }
@@ -284,6 +296,8 @@ class Multi extends Phaser.Scene {
  
 
     update() {
+
+
         let pointer = this.input.activePointer;
         if(pointer.isDown) {
             this.slow = 10;
@@ -300,9 +314,11 @@ class Multi extends Phaser.Scene {
 
         this.mountain.tilePositionX -= 4;
         this.starySky.tilePositionX -= 0.1;
-        if (!this.gameOver) {              
-            this.player.update();         // update player sprite
-            this.bossB.update(this.bombs,this.bombs2,this.bombs3,this.startAngle,this.endAngle,this.bombsHitbox,this.bombsHitbox2,this.bombsHitbox3,this.single,this.playerHitbox);
+        if (!this.gameOver) {
+            
+            this.bullet.update(this.player.x,this.player.y);
+
+            this.bossB.update(this.bombs,this.bombs2,this.bombs3,this.startAngle,this.endAngle,this.bombsHitbox,this.bombsHitbox2,this.bombsHitbox3,this.single,this.playerHitbox,this.bossHitbox);
             
         } 
 

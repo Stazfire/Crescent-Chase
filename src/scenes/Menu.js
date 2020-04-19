@@ -20,6 +20,7 @@ class Menu extends Phaser.Scene {
         
         this.load.image('spaceship', './assets/spaceship.png');
         this.load.image('starfield', './assets/starySky.png');
+        this.load.image('bossHitbox', './assets/starfield.png');
         this.load.image('mountains', './assets/mountains.png');
         this.load.image('trees', './assets/foggyTrees.png');
         this.load.image('ball', 'assets/balls.png');
