@@ -8,6 +8,7 @@ class Menu extends Phaser.Scene {
         this.load.audio('sfx_select', './assets/blip_select12.wav');
         this.load.audio('sfx_explosion', './assets/explosion38.wav');
         this.load.audio('sfx_player', './assets/rocket_shot.wav');
+        this.load.audio('bgm', './assets/bgm.mp3');
         this.load.image('VampyCover', 'assets/VampyStill.png');
         this.load.image('start', 'assets/start.png');
         this.load.image('single', 'assets/singlePlayer.png');
@@ -35,6 +36,7 @@ class Menu extends Phaser.Scene {
     }
 
     create() {
+        
         this.logo = this.add.image(game.config.width/2, game.config.height/2-100, 'logo').setScale(0.5,0.5);
         this.cover = this.add.image(game.config.width/2, game.config.height/2 + 100, 'VampyCover');
         //menu display

@@ -16,7 +16,9 @@ class Multi extends Phaser.Scene {
     create() {
 
         this.setKey();
-
+        this.BGM = game.sound.add('bgm');
+        this.BGM.loop = true;
+        this.BGM.play();
         // place tile sprite
         this.starySky = this.add.tileSprite(0, 0, 1100, 680, 'starfield').setScale(2, 2).setOrigin(0, 0);
         this.mountain = this.add.tileSprite(0, 0, 1100, 680, 'mountains').setScale(2, 2).setOrigin(0, 0);
@@ -139,7 +141,7 @@ class Multi extends Phaser.Scene {
         this.physics.add.overlap(this.bossHitbox, this.bullet, () => {
             this.bullet.setFiring();
             this.sound.play('sfx_explosion');
-            if(this.bossHP.decrease(2)) {
+            if(this.bossHP.decrease(5)) {
                 this.gameOver = true;
                 console.log('You Win');
             }
@@ -331,6 +333,9 @@ class Multi extends Phaser.Scene {
         } 
         else {
             this.gameOver = false;
+            this.timer = 0;
+            this.BGM.loop = false;
+            this.BGM.stop();
             game.input.mouse.releasePointerLock();
             this.scene.start("menuScene");
         }

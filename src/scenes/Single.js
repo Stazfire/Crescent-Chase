@@ -16,7 +16,9 @@ class Single extends Phaser.Scene {
     create() {
 
         this.setKey();
-
+        this.BGM = game.sound.add('bgm');
+        this.BGM.loop = true;
+        this.BGM.play();
         // place tile sprite
         this.starySky = this.add.tileSprite(0, 0, 1100, 680, 'starfield').setScale(2, 2).setOrigin(0, 0);
         this.mountain = this.add.tileSprite(0, 0, 1100, 680, 'mountains').setScale(2, 2).setOrigin(0, 0);
@@ -344,6 +346,9 @@ class Single extends Phaser.Scene {
         }
         else {
             this.gameOver = false;
+            this.timer = 0;
+            this.BGM.loop = false;
+            this.BGM.stop();
             game.input.mouse.releasePointerLock();
             this.scene.start("menuScene");
         }
