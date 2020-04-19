@@ -24,8 +24,8 @@ class Multi extends Phaser.Scene {
         this.mountain = this.add.tileSprite(0, 0, 1100, 680, 'mountains').setScale(2, 2).setOrigin(0, 0);
 
         // add player (p1)
-        this.player = this.physics.add.sprite(game.config.width - 100, game.config.height/2 - 30, 'player');
-        this.playerHitbox = this.physics.add.sprite(game.config.width - 100, game.config.height/2 - 30, 'ball');
+        this.player = this.physics.add.sprite(game.config.width - 100, game.config.height/2 - 50, 'player');
+        this.playerHitbox = this.physics.add.sprite(game.config.width - 100, game.config.height/2 - 50, 'ball');
         this.playerHitbox.setVisible(false);
 
         this.playerHP = new PlayerHealth(this, 1095, 0);
