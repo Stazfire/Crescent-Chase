@@ -6,6 +6,7 @@ class Multi extends Phaser.Scene {
         this.radius = 150;
         this.single = false; //:)
         this.timer = 0;
+        this.gameStart = false;
     }
 
     preload() {
@@ -13,6 +14,7 @@ class Multi extends Phaser.Scene {
     }
 
     create() {
+        
 
         this.setKey();
 
@@ -174,7 +176,35 @@ class Multi extends Phaser.Scene {
 
         this.addEvent();
         
+        let controlsBack = this.add.sprite(540, 350, 'controlBack').setScale(2,2).setInteractive({ pixelPerfect: true });
+        let vampyDisplay = this.add.sprite(game.config.width/2 - 240, game.config.height/2 + 50, 'Vampy').setScale(2,2).setTint(0x000000);
+        vampyDisplay.anims.play('hair');
+        let echoDisplay = this.add.sprite(game.config.width/2 + 240, game.config.height/2 - 30, 'player').setScale(4,4).setTint(0x000000);
+        echoDisplay.anims.play('fly');
+        let controls = this.add.sprite(540, 350, 'control').setInteractive({ pixelPerfect: true });
+        let click = this.add.sprite(game.config.width - 150, game.config.height - 20, 'clickToStart').setScale(0.5,0.5).setInteractive({ pixelPerfect: true });
 
+        controlsBack.depth = 101;
+        vampyDisplay.depth = 102;
+        echoDisplay.depth = 103;
+        controls.depth = 104;
+        click.depth = 105;
+        
+        click.on('pointerover', function () {
+          this.setTint(0x00f2ff);
+        });
+        click.on('pointerout', function () {
+            this.setTint();
+        });
+        controlsBack.on('pointerdown', function () {
+            controlsBack.setVisible(false);
+            controls.setVisible(false);
+            click.setVisible(false);
+            vampyDisplay.setVisible(false);
+            echoDisplay.setVisible(false);
+            this.gameStart = true;
+
+        });
 
     }
 
@@ -284,11 +314,11 @@ class Multi extends Phaser.Scene {
             ship.alpha = 1;                     // make ship visible again
             boom.destroy();                     // remove explosion sprite
         });
-        this.player.depth = 100;
+        
         // score increment and repaint
         this.p1Score += ship.points;
         this.scoreLeft.text = this.p1Score;
-        
+        this.player.depth = 100;
     }
 
     createCircle() {

@@ -32,8 +32,16 @@ class Single extends Phaser.Scene {
             repeat: 100
         });
 
+        this.echoAnims = this.anims.create({
+            key: 'fly',
+            frames: this.anims.generateFrameNumbers('player', { start: 0, end: 10, first: 0}),
+            frameRate: 40,
+            repeat: 10000
+        });
+
         this.bossB = new Boss(this, 0, game.config.height/2 - 50, 'Vampy').setScale(1, 1).setOrigin(0,0);
         this.bossB.anims.play('hair');
+        this.player.anims.play('fly');
         
 
         // add spaceships (x3)
@@ -179,9 +187,36 @@ class Single extends Phaser.Scene {
             repeat: -1
         });
 
-        this.time.addEvent({ delay: 2000, callback: () => {
+        
+        this.time.addEvent({ delay: 3000, callback: () => {
             this.startFiring++;
         }, callbackScope: this, loop: true });
+
+        let controlsBack = this.add.sprite(540, 350, 'controlBack').setScale(2,2).setInteractive({ pixelPerfect: true });
+        let echoDisplay = this.add.sprite(game.config.width/2, game.config.height/2 - 30, 'player').setScale(4,4).setTint(0x000000);
+        echoDisplay.anims.play('fly');
+        let controls = this.add.sprite(540, 350, 'clickSingle').setInteractive({ pixelPerfect: true });
+        let click = this.add.sprite(game.config.width - 150, game.config.height - 20, 'clickToStart').setScale(0.5,0.5).setInteractive({ pixelPerfect: true });
+        
+        controlsBack.depth = 101;
+        echoDisplay.depth = 103;
+        controls.depth = 104;
+        click.depth = 105;
+
+        click.on('pointerover', function () {
+          this.setTint(0x00f2ff);
+        });
+        click.on('pointerout', function () {
+            this.setTint();
+        });
+        controlsBack.on('pointerdown', function () {
+            controlsBack.setVisible(false);
+            controls.setVisible(false);
+            click.setVisible(false);
+            echoDisplay.setVisible(false);
+            this.gameStart = true;
+
+        });
     }
 
     addEvent() {

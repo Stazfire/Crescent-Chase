@@ -12,6 +12,10 @@ class Menu extends Phaser.Scene {
         this.load.image('start', 'assets/start.png');
         this.load.image('single', 'assets/singlePlayer.png');
         this.load.image('multi', 'assets/multiplayer.png');
+        this.load.image('control', 'assets/controls.png');
+        this.load.image('controlBack', 'assets/controlsBack.png');
+        this.load.image('clickToStart', 'assets/click.png');
+        this.load.image('clickSingle', 'assets/clickSingle.png');
         // load images/tile sprites
         
         this.load.image('spaceship', './assets/spaceship.png');
@@ -20,10 +24,10 @@ class Menu extends Phaser.Scene {
         this.load.image('trees', './assets/foggyTrees.png');
         this.load.image('ball', 'assets/balls.png');
         // load spritesheet
-        this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 18, frameHeight: 8, startFrame: 0, endFrame: 9});
+        this.load.spritesheet('explosion', './assets/trails.png', {frameWidth: 12, frameHeight: 6, startFrame: 0, endFrame: 9});
         this.load.spritesheet('moon', './assets/Moon.png', {frameWidth: 30, frameHeight: 30, startFrame: 0, endFrame: 11});
         this.load.spritesheet('Vampy', './assets/Vampy.png', {frameWidth: 171.8, frameHeight: 180, startFrame: 0, endFrame: 11});
-        this.load.spritesheet('player', './assets/Echo.png',{frameWidth: 140, frameHeight: 160, startFrame: 0, endFrame: 10});
+        this.load.spritesheet('player', './assets/Echo.png',{frameWidth: 52.5, frameHeight: 60, startFrame: 0, endFrame: 10});
     }
 
     create() {
