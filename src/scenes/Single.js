@@ -23,7 +23,8 @@ class Single extends Phaser.Scene {
 
         // add player (p1)
         this.player = this.physics.add.sprite(game.config.width - 100, game.config.height/2, 'player');
-        
+        this.playerHitbox = this.physics.add.sprite(game.config.width - 100, game.config.height/2, 'ball');
+        this.playerHitbox.setVisible(false);
         
         this.vampyAnims = this.anims.create({
             key: 'hair',
@@ -45,8 +46,6 @@ class Single extends Phaser.Scene {
         
 
         // add spaceships (x3)
-        this.ship01 = new Spaceship(this, this.player.x, this.player.y, 'spaceship', 0).setOrigin(0,0);
-        this.ship02 = new Spaceship(this, this.player.x, this.player.y, 'spaceship', 0).setOrigin(0,0);
         this.ship03 = new Spaceship(this, this.player.x, this.player.y, 'spaceship', 0).setOrigin(0,0);
 
         // animation config
@@ -126,13 +125,13 @@ class Single extends Phaser.Scene {
         
         this.createCircle();
 
-        this.physics.add.overlap(this.player, this.bombsHitbox, () => {
+        this.physics.add.overlap(this.playerHitbox, this.bombsHitbox, () => {
             this.sound.play('sfx_explosion');
         });
-        this.physics.add.overlap(this.player, this.bombsHitbox2, () => {
+        this.physics.add.overlap(this.playerHitbox, this.bombsHitbox2, () => {
             this.sound.play('sfx_explosion');
         });
-        this.physics.add.overlap(this.player, this.bombsHitbox3, () => {
+        this.physics.add.overlap(this.playerHitbox, this.bombsHitbox3, () => {
             this.sound.play('sfx_explosion');
         });
         
@@ -215,7 +214,27 @@ class Single extends Phaser.Scene {
             click.setVisible(false);
             echoDisplay.setVisible(false);
             this.gameStart = true;
-
+        });
+        click.on('pointerdown', function () {
+            controlsBack.setVisible(false);
+            controls.setVisible(false);
+            click.setVisible(false);
+            echoDisplay.setVisible(false);
+            this.gameStart = true;
+        });
+        controls.on('pointerdown', function () {
+            controlsBack.setVisible(false);
+            controls.setVisible(false);
+            click.setVisible(false);
+            echoDisplay.setVisible(false);
+            this.gameStart = true;
+        });
+        echoDisplay.on('pointerdown', function () {
+            controlsBack.setVisible(false);
+            controls.setVisible(false);
+            click.setVisible(false);
+            echoDisplay.setVisible(false);
+            this.gameStart = true;
         });
     }
 
@@ -233,12 +252,15 @@ class Single extends Phaser.Scene {
         //  Input events
         this.input.on('pointermove', function (pointer) {
             if (this.input.mouse.locked) {
-                
                 this.player.x += pointer.movementX/this.slow;
+                this.playerHitbox.x += pointer.movementX/this.slow;
                 this.player.y += pointer.movementY/this.slow;
+                this.playerHitbox.y += pointer.movementY/this.slow;
                 //  Keep the player within the game
                 this.player.x  = Phaser.Math.Clamp(this.player.x , 10, 1090);
+                this.playerHitbox.x  = Phaser.Math.Clamp(this.playerHitbox.x , 10, 1090);
                 this.player.y  = Phaser.Math.Clamp(this.player.y , 20, 660);
+                this.playerHitbox.y  = Phaser.Math.Clamp(this.playerHitbox.y , 20, 660);
             }
         }, this);
     }
@@ -288,21 +310,10 @@ class Single extends Phaser.Scene {
                 this.bombs.getChildren().forEach(function() {
                     this.bombs.setVisible(true);
                 }, this);
-                this.bossB.update(this.bombs,this.bombs2,this.bombs3,this.startAngle,this.endAngle,this.bombsHitbox,this.bombsHitbox2,this.bombsHitbox3,this.single,this.player);
+                this.bossB.update(this.bombs,this.bombs2,this.bombs3,this.startAngle,this.endAngle,this.bombsHitbox,this.bombsHitbox2,this.bombsHitbox3,this.single,this.playerHitbox);
             }
         } 
 
-        // check collisions
-        // if(this.checkCollision(this.player, this.bombs)) {
-        //     console.log("gameee");
-        //     this.player.reset();
-        // }
-        // if (this.checkCollision(this.player, this.bombs)) {
-        //     //
-        // }
-        if (this.checkCollision(this.player, this.ship02)) {
-            this.shipExplode(this.ship02);
-        }
         if (this.checkCollision(this.player, this.ship03)) {
             this.shipExplode(this.ship03);
         }
@@ -327,7 +338,7 @@ class Single extends Phaser.Scene {
     shipExplode(ship) {
         ship.alpha = 0;                         // temporarily hide ship
         // create explosion sprite at ship's position
-        let boom = this.add.sprite(ship.x, ship.y, 'explosion').setOrigin(0, 0);
+        let boom = this.add.sprite(ship.x - 5, ship.y, 'explosion').setOrigin(0, 0);
         boom.anims.play('explode');             // play explode animation
         boom.on('animationcomplete', () => {    // callback after animation completes
             ship.reset(this.player);                       // reset ship position
