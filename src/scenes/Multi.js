@@ -24,8 +24,8 @@ class Multi extends Phaser.Scene {
         this.mountain = this.add.tileSprite(0, 0, 1100, 680, 'mountains').setScale(2, 2).setOrigin(0, 0);
 
         // add player (p1)
-        this.player = this.physics.add.sprite(game.config.width - 100, game.config.height/2, 'player');
-        this.playerHitbox = this.physics.add.sprite(game.config.width - 100, game.config.height/2, 'ball');
+        this.player = this.physics.add.sprite(game.config.width - 100, game.config.height/2 - 25, 'player');
+        this.playerHitbox = this.physics.add.sprite(game.config.width - 100, game.config.height/2 - 25, 'ball');
         this.playerHitbox.setVisible(false);
 
         this.playerHP = new PlayerHealth(this, 1095, 0);
@@ -141,7 +141,7 @@ class Multi extends Phaser.Scene {
         this.physics.add.overlap(this.bossHitbox, this.bullet, () => {
             this.bullet.setFiring();
             this.sound.play('sfx_explosion');
-            if(this.bossHP.decrease(5)) {
+            if(this.bossHP.decrease(4)) {
                 this.gameOver = true;
                 console.log('You Win');
             }
