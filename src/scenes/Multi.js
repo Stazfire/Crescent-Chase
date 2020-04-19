@@ -260,9 +260,9 @@ class Multi extends Phaser.Scene {
                 this.timer++;
             }, callbackScope: this, loop: true });
 
-            game.canvas.addEventListener('mousedown', function () {
+
                 game.input.mouse.requestPointerLock();
-            });
+
 
             this.slow = 1;
             //  Input events
@@ -280,6 +280,9 @@ class Multi extends Phaser.Scene {
                     this.playerHitbox.y  = Phaser.Math.Clamp(this.playerHitbox.y , 20, 660);
                 }
             }, this);
+        }
+        else {
+            game.input.mouse.releasePointerLock();
         }
     }
 
@@ -326,23 +329,16 @@ class Multi extends Phaser.Scene {
             this.bossB.update(this.bombs,this.bombs2,this.bombs3,this.startAngle,this.endAngle,this.bombsHitbox,this.bombsHitbox2,this.bombsHitbox3,this.single,this.playerHitbox,this.bossHitbox);
             
         } 
-
-        // check collisions
-        // if(this.checkCollision(this.player, this.bombs)) {
-        //     console.log("gameee");
-        //     this.player.reset();
-        // }
-        // if (this.checkCollision(this.player, this.bombs)) {
-        //     //
-        // }
+        else {
+            this.gameOver = false;
+            game.input.mouse.releasePointerLock();
+            this.scene.start("menuScene");
+        }
 
         if (this.checkCollision(this.player, this.ship03)) {
             this.shipExplode(this.ship03);
         }
 
-        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
-            this.scene.start("menuScene");
-        }
     }
 
     checkCollision(player, bombs) {

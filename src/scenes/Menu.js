@@ -32,6 +32,7 @@ class Menu extends Phaser.Scene {
     }
 
     create() {
+        
         this.cover = this.add.image(game.config.width/2, game.config.height/2 + 100, 'VampyCover');
         //menu display
         let menuConfig = {
@@ -93,6 +94,7 @@ class Menu extends Phaser.Scene {
             this.setTint();
         });
         start.on('pointerdown', function () {
+          game.input.mouse.releasePointerLock();
           singlePlayer.setVisible(true);
           multiplayer.setVisible(true);
         });

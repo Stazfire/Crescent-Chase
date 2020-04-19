@@ -262,30 +262,35 @@ class Single extends Phaser.Scene {
     }
 
     addEvent() {
-
-        this.time.addEvent({ delay: 1000, callback: () => { 
+        if(!this.gameOver) {
+            this.time.addEvent({ delay: 1000, callback: () => { 
                 this.timer++;
-        }, callbackScope: this, loop: true });
+            }, callbackScope: this, loop: true });
 
-        game.canvas.addEventListener('mousedown', function () {
-            game.input.mouse.requestPointerLock();
-        });
 
-        this.slow = 1;
-        //  Input events
-        this.input.on('pointermove', function (pointer) {
-            if (this.input.mouse.locked) {
-                this.player.x += pointer.movementX/this.slow;
-                this.playerHitbox.x += pointer.movementX/this.slow;
-                this.player.y += pointer.movementY/this.slow;
-                this.playerHitbox.y += pointer.movementY/this.slow;
-                //  Keep the player within the game
-                this.player.x  = Phaser.Math.Clamp(this.player.x , 10, 1090);
-                this.playerHitbox.x  = Phaser.Math.Clamp(this.playerHitbox.x , 10, 1090);
-                this.player.y  = Phaser.Math.Clamp(this.player.y , 20, 660);
-                this.playerHitbox.y  = Phaser.Math.Clamp(this.playerHitbox.y , 20, 660);
-            }
-        }, this);
+                game.input.mouse.requestPointerLock();
+
+
+            this.slow = 1;
+            //  Input events
+            this.input.on('pointermove', function (pointer) {
+                if (this.input.mouse.locked) {
+                    
+                    this.player.x += pointer.movementX/this.slow;
+                    this.playerHitbox.x += pointer.movementX/this.slow;
+                    this.player.y += pointer.movementY/this.slow;
+                    this.playerHitbox.y += pointer.movementY/this.slow;
+                    //  Keep the player within the game
+                    this.player.x  = Phaser.Math.Clamp(this.player.x , 10, 1090);
+                    this.playerHitbox.x  = Phaser.Math.Clamp(this.playerHitbox.x , 10, 1090);
+                    this.player.y  = Phaser.Math.Clamp(this.player.y , 20, 660);
+                    this.playerHitbox.y  = Phaser.Math.Clamp(this.playerHitbox.y , 20, 660);
+                }
+            }, this);
+        }
+        else {
+            game.input.mouse.releasePointerLock();
+        }
     }
 
     setKey() {
@@ -321,30 +326,33 @@ class Single extends Phaser.Scene {
 
         this.timeRight.text = this.timer;
         // check key input for restart
-        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyI)) {
-            this.scene.restart(this.p1Score);
-        }
+        // if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyI)) {
+        //     this.scene.restart(this.p1Score);
+        // }
 
         this.mountain.tilePositionX -= 4;
         this.starySky.tilePositionX -= 0.1;
-        if (!this.gameOver) {              
+        if(!this.gameOver) {              
 
-            if(this.startFiring >=3) {
+            if(this.startFiring >=2) {
                 this.bombs.getChildren().forEach(function() {
                     this.bombs.setVisible(true);
                 }, this);
                 this.bullet.update(this.player.x,this.player.y);
                 this.bossB.update(this.bombs,this.bombs2,this.bombs3,this.startAngle,this.endAngle,this.bombsHitbox,this.bombsHitbox2,this.bombsHitbox3,this.single,this.playerHitbox,this.bossHitbox);
             }
-        } 
+        }
+        else {
+            this.gameOver = false;
+            game.input.mouse.releasePointerLock();
+            this.scene.start("menuScene");
+        }
 
         if (this.checkCollision(this.player, this.ship03)) {
             this.shipExplode(this.ship03);
         }
 
-        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
-            this.scene.start("menuScene");
-        }
+        
     }
 
     checkCollision(player, bombs) {
