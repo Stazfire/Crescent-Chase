@@ -13,8 +13,15 @@
 //Comments:
 //  The music and sound buffers after replaying the game a few time. (after 5th replays)
 //  This isn't a problem if you restart the page but I really don't know how to fix it.
+//
+//Dev Notes:
+//  The single player mode is easier than it look - maybe too easy
+//  For multiplayer, Echo is broken when you know how to dodge all of Vampy's moves
+//  Vampy does a lot of damage but is a bit predictable
 //  
 //  I had a lot of fun making this, I hope you enjoy it, and thank you for playing :)
+
+
 let config = {
     type: Phaser.AUTO,
     scale: {
